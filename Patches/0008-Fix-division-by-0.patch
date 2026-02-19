@@ -1,0 +1,36 @@
+From 08eb5b94e8468447076a795a19a4022dc049e024 Mon Sep 17 00:00:00 2001
+From: Marek Havrila <ma.havrila@gmail.com>
+Date: Mon, 16 Feb 2026 23:49:50 +0100
+Subject: [PATCH 08/12] Fix division by 0
+
+As we do not have purchases in rc_15 dataset
+we can not divade a there is 0 hits.
+
+diff --git a/src/evaluate_stock.py b/src/evaluate_stock.py
+index 55afd5e..e1c6239 100644
+--- a/src/evaluate_stock.py
++++ b/src/evaluate_stock.py
+@@ -103,9 +103,9 @@ def evaluate(model, args, val_or_test, state_size, item_num, device, div_rl_embe
+     if val_or_test == "val":
+         for i in range(len(topk)):
+             hr_click = hit_clicks[i] / total_clicks
+-            hr_purchase = hit_purchase[i] / total_purchase
++            hr_purchase = hit_purchase[i]
+             ng_click = ndcg_clicks[i] / total_clicks
+-            ng_purchase = ndcg_purchase[i] / total_purchase
++            ng_purchase = ndcg_purchase[i]
+             val_acc = val_acc + hr_click + hr_purchase + ng_click + ng_purchase
+             print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+             print('cumulative reward @ %d: %f' % (topk[i], total_reward[i]))
+@@ -134,9 +134,9 @@ def evaluate(model, args, val_or_test, state_size, item_num, device, div_rl_embe
+     else:
+         for i in range(len(topk)):
+             hr_click = hit_clicks[i] / total_clicks
+-            hr_purchase = hit_purchase[i] / total_purchase
++            hr_purchase = hit_purchase[i]
+             ng_click = ndcg_clicks[i] / total_clicks
+-            ng_purchase = ndcg_purchase[i] / total_purchase
++            ng_purchase = ndcg_purchase[i]
+             val_acc = val_acc + hr_click + hr_purchase + ng_click + ng_purchase
+             print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+             print('TEST cumulative reward @ %d: %f' % (topk[i], total_reward[i]))

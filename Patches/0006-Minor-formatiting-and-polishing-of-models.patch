@@ -1,0 +1,372 @@
+From 2e60b880348876aaeb5fad45e75dd695a2cc20ea Mon Sep 17 00:00:00 2001
+From: Marek Havrila <ma.havrila@gmail.com>
+Date: Mon, 16 Feb 2026 23:23:51 +0100
+Subject: [PATCH 06/12] Minor formatiting and polishing of models
+
+
+diff --git a/src/Caser.py b/src/Caser.py
+index f827f87..66ebd7f 100644
+--- a/src/Caser.py
++++ b/src/Caser.py
+@@ -108,11 +108,13 @@ class Args:
+     lr = 0.01 if dataset == 'rc15' else 0.005
+     num_filters = 16
+     filter_sizes = '[2,3,4]'
+-    div_emb_matrix = torch.load('{}/div4rec/{}_models/gru_embedding.pt'.format(os.path.abspath(os.getcwd())[:-4], dataset))
++    div4rec = os.path.dirname(os.getcwd()) + '/div4rec'
++    div_emb_matrix = torch.load(f'{div4rec}/{dataset}_models/gru_embedding.pt', weights_only=False)
+     div_emb_matrix.weight.requires_grad = False
+-    data_path = '{}/div4rec/{}_data/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+-    models_path = '{}/div4rec/{}_models/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+-    results_path = '{}/div4rec/{}_results/caser/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
++    data_path = f'{div4rec}/{dataset}_data/'
++    models_path = f'{div4rec}/{dataset}_models/'
++    results_path = f'{div4rec}/{dataset}_results/caser/'
++    os.makedirs(results_path, exist_ok=True)
+     results_to_file = True
+     dropout_rate = 0.1
+ 
+@@ -160,20 +162,17 @@ if __name__ == '__main__':
+             caser.zero_grad()
+             supervised_out = caser(state.to(device).long(), len_state.long()) # len_state.to(device).long())
+             supervised_loss = criterion(supervised_out, action.to(device).long())
++            scalar_loss = supervised_loss.item()
+ 
+             optimizer.zero_grad()
+             supervised_loss.backward()
+             optimizer.step()
+ 
+             total_step += 1
+-            if total_step == 200:
+-                print('For 200 steps, {} seconds elapsed.'.format(time.time() - start_time))
+-                sys.stdout.flush()
+-
+             if total_step % 200 == 0:
+                 print('Model is Vanilla Caser')
+                 print('Supervised loss is %.3f' % (supervised_loss.item()))
+-                print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, supervised_loss.item()))
++                print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, scalar_loss))
+                 sys.stdout.flush()
+ 
+             if total_step % args.eval_iter == 0:
+diff --git a/src/CaserSMORL.py b/src/CaserSMORL.py
+index e2f8876..2ab3a7f 100644
+--- a/src/CaserSMORL.py
++++ b/src/CaserSMORL.py
+@@ -206,11 +206,13 @@ class Args:
+     num_filters = 16
+     filter_sizes = '[2,3,4]'
+     dropout_rate = 0.1
+-    div_emb_matrix = torch.load('{}/div4rec/{}_models/gru_embedding.pt'.format(os.path.abspath(os.getcwd())[:-4], dataset))
++    div4rec = os.path.dirname(os.getcwd()) + '/div4rec'
++    div_emb_matrix = torch.load(f'{div4rec}/{dataset}_models/gru_embedding.pt', weights_only=False)
+     div_emb_matrix.weight.requires_grad = False
+-    data_path = '{}/div4rec/{}_data/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+-    models_path = '{}/div4rec/{}_models/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+-    results_path = '{}/div4rec/{}_results/casersmorl/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
++    data_path = f'{div4rec}/{dataset}_data/'
++    models_path = f'{div4rec}/{dataset}_models/'
++    results_path = f'{div4rec}/{dataset}_results/casersmorl/'
++    os.makedirs(results_path, exist_ok=True)
+     results_to_file = True
+     smorl_weights_set = [torch.Tensor([1.0, 1.0, 1.0]), torch.Tensor([0.0, 1.0, 0.0]),
+                          torch.Tensor([0.0, 0.0, 1.0]), torch.Tensor([0.0, 1.0, 1.0]),
+@@ -341,19 +343,18 @@ if __name__ == '__main__':
+                 )
+                 supervised_loss = criterion(supervised_out, action.to(device).long())
+                 loss = supervised_loss + smorl_loss
++                scalar_loss = loss.item()
++
+                 optimizer.zero_grad()
+                 loss.backward()
+                 optimizer.step()
+ 
+                 total_step += 1
+-                if total_step == 200:
+-                    print('For 200 steps, {} seconds elapsed.'.format(time.time() - start_time))
+-                    sys.stdout.flush()
+ 
+                 if total_step % 200 == 0:
+                     print('Model is ', model_name)
+                     print('Supervised loss is %.3f, SMORL loss is %.3f' % (supervised_loss.item(), smorl_loss))
+-                    print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, loss.item()))
++                    print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, scalar_loss))
+                     sys.stdout.flush()
+ 
+                 if total_step % args.eval_iter == 0:
+diff --git a/src/GRU.py b/src/GRU.py
+index a9ebf1d..9bdd848 100644
+--- a/src/GRU.py
++++ b/src/GRU.py
+@@ -57,11 +57,13 @@ class Args:
+     r_buy = 1.0
+     lr = 0.01 if dataset == 'rc15' else 0.005
+     dropout_rate = 0.1
+-    div_emb_matrix = torch.load('{}/div4rec/{}_models/gru_embedding.pt'.format(os.path.abspath(os.getcwd())[:-4], dataset))
++    div4rec = os.path.dirname(os.getcwd()) + '/div4rec'
++    div_emb_matrix = torch.load(f'{div4rec}/{dataset}_models/gru_embedding.pt', weights_only=False)
+     div_emb_matrix.weight.requires_grad = False
+-    data_path = '{}/div4rec/{}_data/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+-    models_path = '{}/div4rec/{}_models/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+-    results_path = '{}/div4rec/{}_results/gru/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
++    data_path = f'{div4rec}/{dataset}_data/'
++    models_path = f'{div4rec}/{dataset}_models/'
++    results_path = f'{div4rec}/{dataset}_results/gru/'
++    os.makedirs(results_path, exist_ok=True)
+     results_to_file = True
+ 
+ 
+@@ -102,19 +104,17 @@ if __name__ == '__main__':
+             gru.zero_grad()
+             supervised_out = gru(state.to(device).long(), len_state.long()) # len_state.to(device).long())
+             supervised_loss = criterion(supervised_out, action.to(device).long())
++            scalar_loss = supervised_loss.item()
++
+             optimizer.zero_grad()
+             supervised_loss.backward()
+             optimizer.step()
+             total_step += 1
+ 
+-            if total_step == 200:
+-                print('For 200 steps, {} seconds elapsed.'.format(time.time() - start_time))
+-                sys.stdout.flush()
+-
+             if total_step % 200 == 0:
+                 print('Model is Vanilla GRU')
+                 print('Supervised loss is %.3f' % (supervised_loss.item()))
+-                print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, supervised_loss.item()))
++                print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, scalar_loss))
+                 sys.stdout.flush()
+ 
+             if total_step % args.eval_iter == 0:
+diff --git a/src/GRUSMORL.py b/src/GRUSMORL.py
+index 137a296..46934c6 100644
+--- a/src/GRUSMORL.py
++++ b/src/GRUSMORL.py
+@@ -145,11 +145,13 @@ class Args:
+     r_buy = 1.0
+     lr = 0.01 if dataset == 'rc15' else 0.005
+     dropout_rate = 0.1
+-    div_emb_matrix = torch.load('{}/div4rec/{}_models/gru_embedding.pt'.format(os.path.abspath(os.getcwd())[:-4], dataset))
++    div4rec = os.path.dirname(os.getcwd()) + '/div4rec'
++    div_emb_matrix = torch.load(f'{div4rec}/{dataset}_models/gru_embedding.pt', weights_only=False)
+     div_emb_matrix.weight.requires_grad = False
+-    data_path = '{}/div4rec/{}_data/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+-    models_path = '{}/div4rec/{}_models/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+-    results_path = '{}/div4rec/{}_results/grusmorl/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
++    data_path = f'{div4rec}/{dataset}_data/'
++    models_path = f'{div4rec}/{dataset}_models/'
++    results_path = f'{div4rec}/{dataset}_results/grusmorl/'
++    os.makedirs(results_path, exist_ok=True)
+     results_to_file = True
+     smorl_weights_set = [torch.Tensor([1.0, 1.0, 1.0]), torch.Tensor([0.0, 1.0, 0.0]),
+                          torch.Tensor([0.0, 0.0, 1.0]), torch.Tensor([0.0, 1.0, 1.0]),
+@@ -274,19 +276,18 @@ if __name__ == '__main__':
+                 )
+                 supervised_loss = criterion(supervised_out, action.to(device).long())
+                 loss = supervised_loss + smorl_loss
++                scalar_loss = loss.item()
++
+                 optimizer.zero_grad()
+                 loss.backward()
+                 optimizer.step()
+ 
+                 total_step += 1
+-                if total_step == 200:
+-                    print('For 200 steps, {} seconds elapsed.'.format(time.time() - start_time))
+-                    sys.stdout.flush()
+ 
+                 if total_step % 200 == 0:
+                     print('Model is ', model_name)
+                     print('Supervised loss is %.3f, SMORL loss is %.3f' % (supervised_loss.item(), smorl_loss))
+-                    print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, loss.item()))
++                    print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, scalar_loss))
+                     sys.stdout.flush()
+ 
+                 if total_step % args.eval_iter == 0:
+diff --git a/src/NextItNet.py b/src/NextItNet.py
+index 9d0e703..3041474 100644
+--- a/src/NextItNet.py
++++ b/src/NextItNet.py
+@@ -71,12 +71,13 @@ class Args:
+     r_buy = 1.0
+     lr = 0.01 if dataset == 'rc15' else 0.005
+     dropout_rate = 0.1
+-    div_emb_matrix = torch.load(
+-        '{}/div4rec/{}_models/gru_embedding.pt'.format(os.path.abspath(os.getcwd())[:-4], dataset))
++    div4rec = os.path.dirname(os.getcwd()) + '/div4rec'
++    div_emb_matrix = torch.load(f'{div4rec}/{dataset}_models/gru_embedding.pt', weights_only=False)
+     div_emb_matrix.weight.requires_grad = False
+-    data_path = '{}/div4rec/{}_data/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+-    models_path = '{}/div4rec/{}_models/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+-    results_path = '{}/div4rec/{}_results/nextitnet/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
++    data_path = f'{div4rec}/{dataset}_data/'
++    models_path = f'{div4rec}/{dataset}_models/'
++    results_path = f'{div4rec}/{dataset}_results/nextitnet/'
++    os.makedirs(results_path, exist_ok=True)
+     results_to_file = True
+     num_filters = 16
+     dilations = '[1, 2, 1, 2, 1, 2]'
+@@ -125,20 +126,19 @@ if __name__ == '__main__':
+             nextItNet.zero_grad()
+             supervised_out = nextItNet(state.to(device).long(), len_state.long())  # len_state.to(device).long())
+             supervised_loss = criterion(supervised_out, action.to(device).long())
++            scalar_loss = supervised_loss.item()
++
+             optimizer.zero_grad()
+             supervised_loss.backward()
+             optimizer.step()
+ 
+             total_step += 1
+-            if total_step == 200:
+-                print('For 200 steps, {} seconds elapsed.'.format(time.time() - start_time))
+-                sys.stdout.flush()
+ 
+             if total_step % 200 == 0:
+                 print('Model is NextItNet',)
+                 print('Supervised loss is %.3f' % (supervised_loss.item()))
+-                print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step,
+-                                                                      supervised_loss.item()))
++                print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, scalar_loss))
++                sys.stdout.flush()
+             if total_step % args.eval_iter == 0:
+                 print('Evaluating Vanilla NextItNet Model')
+                 val_acc, predictions = evaluate(nextItNet, args, 'val', state_size, item_num, device, args.div_emb_matrix, skip=args.skip)
+diff --git a/src/NextItNetSMORL.py b/src/NextItNetSMORL.py
+index e26fca5..a1c4f11 100644
+--- a/src/NextItNetSMORL.py
++++ b/src/NextItNetSMORL.py
+@@ -159,12 +159,13 @@ class Args:
+     lr = 0.01 if dataset == 'rc15' else 0.005
+     dilations = '[1, 2, 1, 2, 1, 2]'
+     dropout_rate = 0.1
+-    div_emb_matrix = torch.load(
+-        '{}/div4rec/{}_models/gru_embedding.pt'.format(os.path.abspath(os.getcwd())[:-4], dataset))
++    div4rec = os.path.dirname(os.getcwd()) + '/div4rec'
++    div_emb_matrix = torch.load(f'{div4rec}/{dataset}_models/gru_embedding.pt', weights_only=False)
+     div_emb_matrix.weight.requires_grad = False
+-    data_path = '{}/div4rec/{}_data/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+-    models_path = '{}/div4rec/{}_models/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+-    results_path = '{}/div4rec/{}_results/nextitnetsmorl/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
++    data_path = f'{div4rec}/{dataset}_data/'
++    models_path = f'{div4rec}/{dataset}_models/'
++    results_path = f'{div4rec}/{dataset}_results/nextitnetsmorl/'
++    os.makedirs(results_path, exist_ok=True)
+     results_to_file = True
+     smorl_weights_set = [torch.Tensor([1.0, 1.0, 1.0]), torch.Tensor([0.0, 1.0, 0.0]),
+                          torch.Tensor([0.0, 0.0, 1.0]), torch.Tensor([0.0, 1.0, 1.0]),
+@@ -291,19 +292,18 @@ if __name__ == '__main__':
+                 )
+                 supervised_loss = criterion(supervised_out, action.to(device).long())
+                 loss = supervised_loss + morl_loss
++                scalar_loss = loss.item()
++
+                 optimizer.zero_grad()
+                 loss.backward()
+                 optimizer.step()
+ 
+                 total_step += 1
+-                if total_step == 200:
+-                    print('For 200 steps, {} seconds elapsed.'.format(time.time() - start_time))
+-                    sys.stdout.flush()
+ 
+                 if total_step % 200 == 0:
+                     print('Model is ', model_name)
+                     print('Supervised loss is %.3f, MORL loss is %.3f' % (supervised_loss.item(), morl_loss))
+-                    print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, loss.item()))
++                    print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, scalar_loss))
+                     sys.stdout.flush()
+ 
+                 if total_step % args.eval_iter == 0:
+diff --git a/src/SASRec.py b/src/SASRec.py
+index 64760d6..750d684 100644
+--- a/src/SASRec.py
++++ b/src/SASRec.py
+@@ -78,12 +78,13 @@ class Args:
+     r_buy = 1.0
+     lr = 0.01 if dataset == 'rc15' else 0.005
+     dropout_rate = 0.1
+-    div_emb_matrix = torch.load(
+-        '{}/div4rec/{}_models/gru_embedding.pt'.format(os.path.abspath(os.getcwd())[:-4], dataset))
++    div4rec = os.path.dirname(os.getcwd()) + '/div4rec'
++    div_emb_matrix = torch.load(f'{div4rec}/{dataset}_models/gru_embedding.pt', weights_only=False)
+     div_emb_matrix.weight.requires_grad = False
+-    data_path = '{}/div4rec/{}_data/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+-    models_path = '{}/div4rec/{}_models/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+-    results_path = '{}/div4rec/{}_results/sasrec/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
++    data_path = f'{div4rec}/{dataset}_data/'
++    models_path = f'{div4rec}/{dataset}_models/'
++    results_path = f'{div4rec}/{dataset}_results/sasrec/'
++    os.makedirs(results_path, exist_ok=True)
+     results_to_file = True
+ 
+ 
+@@ -128,19 +129,18 @@ if __name__ == '__main__':
+             sasRec.zero_grad()
+             supervised_out = sasRec(state.to(device).long(), len_state.long())  # len_state.to(device).long())
+             supervised_loss = criterion(supervised_out, action.to(device).long())
++            scalar_loss = supervised_loss.item()
++            
+             optimizer.zero_grad()
+             supervised_loss.backward()
+             optimizer.step()
+ 
+             total_step += 1
+-            if total_step == 200:
+-                print('For 200 steps, {} seconds elapsed.'.format(time.time() - start_time))
+-                sys.stdout.flush()
+                 
+             if total_step % 200 == 0:
+                 print('Model is Vanilla SASRec', )
+                 print('Supervised loss is %.3f' % (supervised_loss.item()))
+-                print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, supervised_loss.item()))
++                print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, scalar_loss))
+                 sys.stdout.flush()
+ 
+             if total_step % args.eval_iter == 0:
+diff --git a/src/SASRecSMORL.py b/src/SASRecSMORL.py
+index 0e10201..381a5b8 100644
+--- a/src/SASRecSMORL.py
++++ b/src/SASRecSMORL.py
+@@ -169,12 +169,13 @@ class Args:
+     r_buy = 1.0
+     lr = 0.01 if dataset == 'rc15' else 0.005
+     dropout_rate = 0.1
+-    div_emb_matrix = torch.load(
+-        '{}/div4rec/{}_models/gru_embedding.pt'.format(os.path.abspath(os.getcwd())[:-4], dataset))
++    div4rec = os.path.dirname(os.getcwd()) + '/div4rec'
++    div_emb_matrix = torch.load(f'{div4rec}/{dataset}_models/gru_embedding.pt', weights_only=False)
+     div_emb_matrix.weight.requires_grad = False
+-    data_path = '{}/div4rec/{}_data/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+-    models_path = '{}/div4rec/{}_models/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+-    results_path = '{}/div4rec/{}_results/sasrecsmorl/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
++    data_path = f'{div4rec}/{dataset}_data/'
++    models_path = f'{div4rec}/{dataset}_models/'
++    results_path = f'{div4rec}/{dataset}_results/sasrecsmorl/'
++    os.makedirs(results_path, exist_ok=True)
+     results_to_file = True
+     discount = 0.5
+     smorl_weights_set = [torch.Tensor([1.0, 1.0, 1.0]), torch.Tensor([0.0, 1.0, 0.0]),
+@@ -299,19 +300,18 @@ if __name__ == '__main__':
+                 )
+                 supervised_loss = criterion(supervised_out, action.to(device).long())
+                 loss = supervised_loss + smorl_loss
++                scalar_loss = loss.item()
++
+                 optimizer.zero_grad()
+                 loss.backward()
+                 optimizer.step()
+ 
+                 total_step += 1
+-                if total_step == 200:
+-                    print('For 200 steps, {} seconds elapsed.'.format(time.time() - start_time))
+-                    sys.stdout.flush()
+ 
+                 if total_step % 200 == 0:
+                     print('Model is ', model_name)
+                     print('Supervised loss is %.3f, SMORL loss is %.3f' % (supervised_loss.item(), smorl_loss))
+-                    print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, loss.item()))
++                    print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, scalar_loss = loss.item()))
+                     sys.stdout.flush()
+ 
+                 if total_step % args.eval_iter == 0:

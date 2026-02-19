@@ -1,0 +1,252 @@
+From 49b6adb7c7f02e6ec99568c65903f3f01d75a26a Mon Sep 17 00:00:00 2001
+From: Marek Havrila <ma.havrila@gmail.com>
+Date: Thu, 19 Feb 2026 10:02:19 +0100
+Subject: [PATCH 12/12] Minor fixes
+
+
+diff --git a/src/Caser.py b/src/Caser.py
+index 66ebd7f..f9661b6 100644
+--- a/src/Caser.py
++++ b/src/Caser.py
+@@ -98,9 +98,9 @@ class Caser(nn.Module):
+ 
+ class Args:
+     skip = 1
+-    dataset = 'rc15'
++    dataset = 'rc15'    # 'retail_rocket'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+-    epochs = 30
++    epochs = 60
+     batch_size = 256
+     hidden_factor = 64
+     r_click = 0.2
+diff --git a/src/CaserSMORL.py b/src/CaserSMORL.py
+index 59e9b94..44b2aa5 100644
+--- a/src/CaserSMORL.py
++++ b/src/CaserSMORL.py
+@@ -211,9 +211,9 @@ class Args:
+     torch.cuda.manual_seed(random_seed)
+     torch.cuda.manual_seed_all(random_seed)
+     torch.backends.cudnn.deterministic = True
+-    dataset = 'rc15'
++    dataset = 'rc15'    # 'retail_rocket'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+-    epochs = 3
++    epochs = 60
+     batch_size = 256
+     hidden_factor = 64
+     r_click = 0.2
+diff --git a/src/GRU.py b/src/GRU.py
+index 9bdd848..9347519 100644
+--- a/src/GRU.py
++++ b/src/GRU.py
+@@ -48,9 +48,9 @@ class GRU(nn.Module):
+ 
+ class Args:
+     skip = 1
+-    dataset = 'rc15'
++    dataset = 'rc15'    # 'retail_rocket'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+-    epochs = 30
++    epochs = 60
+     batch_size = 256
+     hidden_factor = 64
+     r_click = 0.2
+diff --git a/src/GRUSMORL.py b/src/GRUSMORL.py
+index b41df11..728ed71 100644
+--- a/src/GRUSMORL.py
++++ b/src/GRUSMORL.py
+@@ -152,9 +152,9 @@ class Args:
+     torch.cuda.manual_seed(random_seed)
+     torch.cuda.manual_seed_all(random_seed)
+     torch.backends.cudnn.deterministic = True
+-    dataset = 'rc15'
++    dataset = 'rc15'    # 'retail_rocket'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+-    epochs = 50  # 50
++    epochs = 60  # 50
+     batch_size = 256
+     hidden_factor = 64
+     r_click = 0.2
+diff --git a/src/NextItNet.py b/src/NextItNet.py
+index 3041474..bdd0aab 100644
+--- a/src/NextItNet.py
++++ b/src/NextItNet.py
+@@ -62,9 +62,9 @@ class NextItNet(nn.Module):
+ 
+ class Args:
+     skip = 1
+-    dataset = 'rc15'
++    dataset = 'rc15'    # 'retail_rocket'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+-    epochs = 30
++    epochs = 60
+     batch_size = 256
+     hidden_factor = 64
+     r_click = 0.2
+diff --git a/src/NextItNetSMORL.py b/src/NextItNetSMORL.py
+index 6bfb2a6..0e830a9 100644
+--- a/src/NextItNetSMORL.py
++++ b/src/NextItNetSMORL.py
+@@ -51,10 +51,6 @@ class NextItNetSMORL(nn.Module):
+         # Novelty RL Head
+         self.nov_rl_fc1 = nn.Linear(self.hidden_size, self.item_num)
+ 
+-    def get_nov_rewards(self, preds):
+-        preds = preds.tolist()
+-        return torch.Tensor([self.novelty_rewards_dict[key] for key in preds]).to(self.device)
+-
+     def get_div_rewards(self, states, len_states, preds):
+         div_rewards = torch.zeros(len(states)).to(self.device)
+         for i in range(len(states)):
+@@ -169,9 +165,9 @@ class Args:
+     torch.cuda.manual_seed(random_seed)
+     torch.cuda.manual_seed_all(random_seed)
+     torch.backends.cudnn.deterministic = True
+-    dataset = 'rc15'
++    dataset = 'rc15'    # 'retail_rocket'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+-    epochs = 50
++    epochs = 60
+     batch_size = 256
+     hidden_factor = 64
+     r_click = 0.2
+@@ -200,7 +196,7 @@ if __name__ == '__main__':
+     # Network parameters
+     args = Args()
+ 
+-    device = set_device()
++    device = set_device(0)
+     print('Using {} For Training'.format(torch.cuda.get_device_name()))
+     for smorl_weights in args.smorl_weights_set:
+         file_name = 'nextitnet_smorl{}_acc{}_div{}_nov{}.txt'.format(
+diff --git a/src/SASRec.py b/src/SASRec.py
+index 750d684..b2d1e16 100644
+--- a/src/SASRec.py
++++ b/src/SASRec.py
+@@ -69,9 +69,9 @@ class SASRec(nn.Module):
+ 
+ class Args:
+     skip = 1
+-    dataset = 'rc15'
++    dataset = 'rc15'    # 'retail_rocket'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+-    epochs = 30
++    epochs = 60
+     batch_size = 256
+     hidden_factor = 64
+     r_click = 0.2
+diff --git a/src/SASRecSMORL.py b/src/SASRecSMORL.py
+index 041e3ce..3f5e57e 100644
+--- a/src/SASRecSMORL.py
++++ b/src/SASRecSMORL.py
+@@ -176,9 +176,9 @@ class Args:
+     torch.cuda.manual_seed(random_seed)
+     torch.cuda.manual_seed_all(random_seed)
+     torch.backends.cudnn.deterministic = True
+-    dataset = 'rc15'
++    dataset = 'rc15'    # 'retail_rocket'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+-    epochs = 50
++    epochs = 60
+     batch_size = 256
+     hidden_factor = 64
+     r_click = 0.2
+@@ -327,7 +327,7 @@ if __name__ == '__main__':
+                     if total_step % 200 == 0:
+                         print('Model is ', model_name)
+                         print('Supervised loss is %.3f, SMORL loss is %.3f' % (supervised_loss.item(), smorl_loss))
+-                        print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, scalar_loss = loss.item()))
++                        print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, scalar_loss))
+                         sys.stdout.flush()
+ 
+                     if total_step % args.eval_iter == 0:
+diff --git a/src/__pycache__/evaluate_stock.cpython-312.pyc b/src/__pycache__/evaluate_stock.cpython-312.pyc
+new file mode 100644
+index 0000000000000000000000000000000000000000..478519ce177b9dfdf2ad1f3de779a76804b51340
+GIT binary patch
+literal 9560
+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
+Yk^BWwZ6QT}L5g1HIHZy$;)g)^KO8D>ZvX%Q
+
+literal 0
+HcmV?d00001
+

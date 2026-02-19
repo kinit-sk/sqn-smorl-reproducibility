@@ -1,0 +1,216 @@
+From 758138a9a1047162a18b9e9bdb132bbb1c7291e0 Mon Sep 17 00:00:00 2001
+From: Marek Havrila <ma.havrila@gmail.com>
+Date: Sun, 15 Feb 2026 19:25:27 +0100
+Subject: [PATCH 04/12] Print models summary
+
+
+diff --git a/src/Caser.py b/src/Caser.py
+index 5a7f6f1..f827f87 100644
+--- a/src/Caser.py
++++ b/src/Caser.py
+@@ -2,6 +2,7 @@ import torch.nn as nn
+ import time
+ from utils import *
+ from evaluate_stock import evaluate
++from torchinfo import summary
+ import setproctitle
+ setproctitle.setproctitle('Caser')
+ 
+@@ -139,6 +140,10 @@ if __name__ == '__main__':
+         filter_sizes=args.filter_sizes,
+         dropout_rate=args.dropout_rate
+     )
++    print(caser)
++    print("TORCHINFO:")
++    summary(caser)
++
+     criterion = nn.CrossEntropyLoss()
+     params = list(caser.parameters())
+     optimizer = torch.optim.Adam(params, lr=args.lr)
+diff --git a/src/CaserSMORL.py b/src/CaserSMORL.py
+index 293c726..e2f8876 100644
+--- a/src/CaserSMORL.py
++++ b/src/CaserSMORL.py
+@@ -2,6 +2,7 @@ import torch.nn as nn
+ import time
+ from utils import *
+ from evaluate_stock import evaluate
++from torchinfo import summary
+ import setproctitle
+ setproctitle.setproctitle('CaserSMORL')
+ import os
+@@ -275,6 +276,15 @@ if __name__ == '__main__':
+             device=device
+         )
+ 
++        print("Model:")
++        print(caser1)
++        print("TORCHINFO:")
++        summary(caser1)
++        print("Model ':")
++        print(caser2)
++        print("TORCHINFO:")
++        summary(caser2)
++
+         criterion = nn.CrossEntropyLoss()
+         params1 = list(caser1.parameters())
+         optimizer1 = torch.optim.Adam(params1, lr=args.lr)
+diff --git a/src/GRU.py b/src/GRU.py
+index fe48089..a9ebf1d 100644
+--- a/src/GRU.py
++++ b/src/GRU.py
+@@ -2,6 +2,7 @@ import torch.nn as nn
+ import time
+ from utils import *
+ from evaluate_stock import evaluate
++from torchinfo import summary
+ import setproctitle
+ setproctitle.setproctitle('GRU')
+ 
+@@ -74,7 +75,7 @@ if __name__ == '__main__':
+     file_name = 'gru.txt'
+     set_stdout(args.results_path, file_name, write_to_file=args.results_to_file)
+ 
+-   sys.stdout.flush()
++    sys.stdout.flush()
+ 
+     state_size, item_num = get_stats(args.data_path)
+     train_loader = prepare_dataloader(args.data_path, args.batch_size)
+@@ -82,6 +83,9 @@ if __name__ == '__main__':
+               item_num=item_num,
+               state_size=state_size,
+               )
++    print(gru)
++    print("TORCHINFO:")
++    summary(gru)
+ 
+     criterion = nn.CrossEntropyLoss()
+     params = list(gru.parameters())
+diff --git a/src/GRUSMORL.py b/src/GRUSMORL.py
+index f21c98a..137a296 100644
+--- a/src/GRUSMORL.py
++++ b/src/GRUSMORL.py
+@@ -3,6 +3,7 @@ import torch.nn as nn
+ import time
+ from utils import *
+ from evaluate_stock import evaluate
++from torchinfo import summary
+ import setproctitle
+ setproctitle.setproctitle('GRUSMORL')
+ import os
+@@ -208,6 +209,15 @@ if __name__ == '__main__':
+             device=device
+         )
+ 
++        print("Model:")
++        print(gru1)
++        print("TORCHINFO:")
++        summary(gru1)
++        print("Model ':")
++        print(gru2)
++        print("TORCHINFO:")
++        summary(gru2) 
++
+         criterion = nn.CrossEntropyLoss()
+         params1 = list(gru1.parameters())
+         optimizer1 = torch.optim.Adam([param for param in params1 if param.requires_grad], lr=args.lr)
+diff --git a/src/NextItNet.py b/src/NextItNet.py
+index ada56b5..9d0e703 100644
+--- a/src/NextItNet.py
++++ b/src/NextItNet.py
+@@ -3,6 +3,7 @@ import torch.nn as nn
+ from utils import *
+ from evaluate_stock import evaluate
+ from NextItNetModules import ResidualBlock
++from torchinfo import summary
+ import setproctitle
+ setproctitle.setproctitle('NextItNet')
+ 
+@@ -103,6 +104,9 @@ if __name__ == '__main__':
+         dilations=args.dilations,
+         device=device
+     )
++    print(nextItNet)
++    print("TORCHINFO:")
++    summary(nextItNet)
+ 
+     criterion = nn.CrossEntropyLoss()
+     params1 = list(nextItNet.parameters())
+diff --git a/src/NextItNetSMORL.py b/src/NextItNetSMORL.py
+index 71448a3..e26fca5 100644
+--- a/src/NextItNetSMORL.py
++++ b/src/NextItNetSMORL.py
+@@ -2,6 +2,7 @@ import time
+ from utils import *
+ from NextItNetModules import *
+ from evaluate_stock import evaluate
++from torchinfo import summary
+ import setproctitle
+ setproctitle.setproctitle('NextItNetSMORL')
+ import os
+@@ -225,6 +226,15 @@ if __name__ == '__main__':
+             device=device
+         )
+ 
++        print("Model:")
++        print(nextItNet1)
++        print("TORCHINFO:")
++        summary(nextItNet1)
++        print("Model ':")
++        print(nextItNet2)
++        print("TORCHINFO:")
++        summary(nextItNet2)
++
+         criterion = nn.CrossEntropyLoss()
+         params1 = list(nextItNet1.parameters())
+         optimizer1 = torch.optim.Adam([param for param in params1 if param.requires_grad], lr=args.lr)
+diff --git a/src/SASRec.py b/src/SASRec.py
+index bb8eef2..64760d6 100644
+--- a/src/SASRec.py
++++ b/src/SASRec.py
+@@ -5,6 +5,7 @@ import sys
+ from utils import *
+ from evaluate_stock import evaluate
+ from SASRecModules import *
++from torchinfo import summary
+ import setproctitle
+ setproctitle.setproctitle('SASRec')
+ 
+@@ -107,6 +108,9 @@ if __name__ == '__main__':
+         dropout=args.dropout_rate,
+         device=device
+     )
++    print(sasRec)
++    print("TORCHINFO:")
++    summary(sasRec)
+ 
+     criterion = nn.CrossEntropyLoss()
+     params1 = list(sasRec.parameters())
+diff --git a/src/SASRecSMORL.py b/src/SASRecSMORL.py
+index 149c05a..0e10201 100644
+--- a/src/SASRecSMORL.py
++++ b/src/SASRecSMORL.py
+@@ -3,6 +3,7 @@ import torch.nn.functional as F
+ from utils import *
+ from evaluate_stock import evaluate
+ from SASRecModules import *
++from torchinfo import summary
+ import setproctitle
+ setproctitle.setproctitle('SASRecSMORL')
+ import os
+@@ -233,6 +234,15 @@ if __name__ == '__main__':
+             device=device
+         )
+ 
++        print("Model:")
++        print(sasrec1)
++        print("TORCHINFO:")
++        summary(sasrec1)
++        print("Model ':")
++        print(sasrec2)
++        print("TORCHINFO:")
++        summary(sasrec2)
++
+         criterion = nn.CrossEntropyLoss()
+         params1 = list(sasrec1.parameters())
+         optimizer1 = torch.optim.Adam(params1, lr=args.lr)

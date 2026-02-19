@@ -1,0 +1,20 @@
+From 71ffb25f1efd4e62205cd552022b8c17bd18f086 Mon Sep 17 00:00:00 2001
+From: Marek Havrila <ma.havrila@gmail.com>
+Date: Mon, 16 Feb 2026 22:43:47 +0100
+Subject: [PATCH 05/12] Squeeze is no longer supported in pandas read_csv
+
+
+diff --git a/src/utils.py b/src/utils.py
+index 44890fe..fb59282 100644
+--- a/src/utils.py
++++ b/src/utils.py
+@@ -191,7 +191,8 @@ def initialize_rel_disc_matrix(size, disc_factor=0.85):
+ 
+ 
+ def get_novelty_reward_dict(data_path):
+-    nov_rewards_csv = pd.read_csv(data_path + 'binary_nov_reward.csv', header=None, index_col=0, squeeze=True)
++    nov_rewards_csv = pd.read_csv(data_path + 'binary_nov_reward.csv', header=None, index_col=0)
++    nov_rewards_csv  = nov_rewards_csv.squeeze()
+     nov_rewards_dict = nov_rewards_csv.to_dict()
+     print('percentage of positive reward: ', len(nov_rewards_csv[nov_rewards_csv == 1]) / len(nov_rewards_csv))
+     return nov_rewards_dict

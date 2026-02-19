@@ -1,0 +1,452 @@
+From 191124c351d92d64e5a343a3da3fbd8b3b6f8609 Mon Sep 17 00:00:00 2001
+From: Marek Havrila <ma.havrila@gmail.com>
+Date: Sun, 15 Feb 2026 17:41:52 +0100
+Subject: [PATCH 01/12] Clean unused code from models
+
+
+diff --git a/src/Caser.py b/src/Caser.py
+index 5c74ed0..7ef454c 100644
+--- a/src/Caser.py
++++ b/src/Caser.py
+@@ -1,6 +1,5 @@
+ import torch.nn as nn
+ import time
+-import getpass
+ from utils import *
+ from evaluate_stock import evaluate
+ import setproctitle
+@@ -100,7 +99,6 @@ class Args:
+     dataset = 'rc15'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+     epochs = 30
+-    resume = 1
+     batch_size = 256
+     hidden_factor = 64
+     r_click = 0.2
+@@ -114,7 +112,6 @@ class Args:
+     models_path = '{}/div4rec/{}_models/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+     results_path = '{}/div4rec/{}_results/caser/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+     results_to_file = True
+-    discount = 0.5
+     dropout_rate = 0.1
+ 
+ 
+@@ -128,7 +125,6 @@ if __name__ == '__main__':
+     file_name = 'caser.txt'
+     set_stdout(args.results_path, file_name, write_to_file=args.results_to_file)
+ 
+-    nov_rewards_dict = get_novelty_reward_dict(args.data_path)
+     sys.stdout.flush()
+ 
+     state_size, item_num = get_stats(args.data_path)
+@@ -151,14 +147,10 @@ if __name__ == '__main__':
+     # Start training loop
+     epoch_times = []
+     total_step = 0
+-    best_val_acc = 6.1418
+     for epoch in range(0, args.epochs):
+         caser.train()
+         start_time = time.time()
+-        avg_loss = 0.
+-        counter = 0
+         for state, len_state, action, next_state, len_next_state, is_buy, is_done in train_loader:
+-            counter += 1
+             caser.zero_grad()
+             supervised_out = caser(state.to(device).long(), len_state.long()) # len_state.to(device).long())
+             supervised_loss = criterion(supervised_out, action.to(device).long())
+@@ -180,7 +172,6 @@ if __name__ == '__main__':
+ 
+             if total_step % args.eval_iter == 0:
+                 print('Evaluating Vanilla Caser Model')
+-                # val_acc = evaluate(caser, args, 'val', state_size, item_num, device, args.div_emb_matrix)
+                 val_acc, predictions = evaluate(caser, args, 'val', state_size, item_num, device, args.div_emb_matrix)
+                 val_acc, predictions = evaluate(caser, args, 'test', state_size, item_num, device, args.div_emb_matrix)
+                 predictions.to_csv(
+@@ -196,4 +187,4 @@ if __name__ == '__main__':
+         print('Total Time Elapsed: {} seconds'.format(str(current_time - start_time)))
+         epoch_times.append(current_time - start_time)
+     print('Total Training Time: {} seconds'.format(str(sum(epoch_times))))
+-    sys.stdout.close()
+\ No newline at end of file
++    sys.stdout.close()
+diff --git a/src/CaserSMORL.py b/src/CaserSMORL.py
+index 439bf27..41173b2 100644
+--- a/src/CaserSMORL.py
++++ b/src/CaserSMORL.py
+@@ -1,6 +1,5 @@
+ import torch.nn as nn
+ import time
+-import getpass
+ from utils import *
+ from evaluate_smorl import evaluate
+ import setproctitle
+@@ -196,7 +195,6 @@ class Args:
+     dataset = 'rc15'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+     epochs = 50
+-    resume = 1
+     batch_size = 256
+     hidden_factor = 64
+     r_click = 0.2
+@@ -214,7 +212,6 @@ class Args:
+     smorl_weights_set = [torch.Tensor([1.0, 1.0, 1.0]), torch.Tensor([0.0, 1.0, 0.0]),
+                          torch.Tensor([0.0, 0.0, 1.0]), torch.Tensor([0.0, 1.0, 1.0]),
+                          torch.Tensor([1.0, 1.0, 0.0]), torch.Tensor([1.0, 0.0, 1.0])]
+-    smorl_weights = torch.Tensor([1, 1, 1])
+     smorl_loss_mult = 1
+     discount = 0.5
+     rel_disc_matrix = initialize_rel_disc_matrix(30)
+@@ -292,15 +289,11 @@ if __name__ == '__main__':
+         # Start training loop
+         epoch_times = []
+         total_step = 0
+-        best_val_acc = 5
+         for epoch in range(0, args.epochs):
+             caser1.train()
+             caser2.train()
+             start_time = time.time()
+-            avg_loss = 0.
+-            counter = 0
+             for state, len_state, action, next_state, len_next_state, is_buy, is_done in train_loader:
+-                counter += 1
+                 pointer = np.random.randint(0, 2)
+                 if pointer == 0:
+                     main_QN = caser1
+@@ -352,11 +345,6 @@ if __name__ == '__main__':
+                     sys.stdout.flush()
+ 
+                 if total_step % args.eval_iter == 0:
+-                    # torch.save(caser1.state_dict(), args.models_path + 'caser_smorl{}{}{}_{}iter.pth'.format(
+-                    #     args.smorl_weights[0],
+-                    #     args.smorl_weights[1],
+-                    #     args.smorl_weights[2],
+-                    #     total_step))
+                     print('Evaluating Main Model')
+                     val_acc_main, predictions_main = evaluate(main_QN, args, 'val', state_size, item_num, device,
+                                                               args.div_emb_matrix)
+diff --git a/src/GRU.py b/src/GRU.py
+index d1a7189..5661c6d 100644
+--- a/src/GRU.py
++++ b/src/GRU.py
+@@ -1,6 +1,5 @@
+ import torch.nn as nn
+ import time
+-import getpass
+ from utils import *
+ from evaluate_stock import evaluate
+ import setproctitle
+@@ -50,7 +49,6 @@ class Args:
+     dataset = 'rc15'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+     epochs = 30
+-    resume = 1
+     batch_size = 256
+     hidden_factor = 64
+     r_click = 0.2
+@@ -75,8 +73,7 @@ if __name__ == '__main__':
+     file_name = 'gru.txt'
+     set_stdout(args.results_path, file_name, write_to_file=args.results_to_file)
+ 
+-    nov_rewards_dict = get_novelty_reward_dict(args.data_path)
+-    sys.stdout.flush()
++   sys.stdout.flush()
+ 
+     state_size, item_num = get_stats(args.data_path)
+     train_loader = prepare_dataloader(args.data_path, args.batch_size)
+@@ -91,19 +88,12 @@ if __name__ == '__main__':
+ 
+     gru.to(device)
+ 
+-    reward_click = args.r_click
+-    reward_buy = args.r_buy
+-
+     # Start training loop
+     epoch_times = []
+     total_step = 0
+-    best_val_acc = 7.5
+     for epoch in range(0, args.epochs):
+         start_time = time.time()
+-        avg_loss = 0.
+-        counter = 0
+         for state, len_state, action, next_state, len_next_state, is_buy, is_done in train_loader:
+-            counter += 1
+             gru.zero_grad()
+             supervised_out = gru(state.to(device).long(), len_state.long()) # len_state.to(device).long())
+             supervised_loss = criterion(supervised_out, action.to(device).long())
+@@ -122,13 +112,8 @@ if __name__ == '__main__':
+                 print('Epoch {}......Step: {}....... Loss: {}'.format(epoch, total_step, supervised_loss.item()))
+                 sys.stdout.flush()
+ 
+-            # if total_step == 10000:
+-            #     torch.save(gru.item_embeddings, args.models_path + 'gru_embedding.pt')
+-            #     print('EMBEDDINGS SAVED')
+-
+             if total_step % args.eval_iter == 0:
+                 print('Evaluating Vanilla GRU Model')
+-                # val_acc = evaluate(gru, args, 'val', state_size, item_num, device, args.div_emb_matrix)
+                 val_acc, predictions = evaluate(gru, args, 'val', state_size, item_num, device, args.div_emb_matrix)
+                 val_acc, predictions = evaluate(gru, args, 'test', state_size, item_num, device, args.div_emb_matrix)
+                 predictions.to_csv(
+diff --git a/src/GRUSMORL.py b/src/GRUSMORL.py
+index 615e7f5..880a667 100644
+--- a/src/GRUSMORL.py
++++ b/src/GRUSMORL.py
+@@ -1,7 +1,6 @@
+ import torch
+ import torch.nn as nn
+ import time
+-import getpass
+ from utils import *
+ from evaluate_smorl import evaluate
+ import setproctitle
+@@ -137,7 +136,6 @@ class Args:
+     dataset = 'rc15'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+     epochs = 50  # 50
+-    resume = 1
+     batch_size = 256
+     hidden_factor = 64
+     r_click = 0.2
+@@ -224,15 +222,11 @@ if __name__ == '__main__':
+         # Start training loop
+         epoch_times = []
+         total_step = 0
+-        best_val_acc = 6.1418
+         for epoch in range(0, args.epochs):
+             gru1.train()
+             gru2.train()
+             start_time = time.time()
+-            avg_loss = 0.
+-            counter = 0
+             for state, len_state, action, next_state, len_next_state, is_buy, is_done in train_loader:
+-                counter += 1
+                 pointer = np.random.randint(0, 2)
+                 if pointer == 0:
+                     main_QN = gru1
+@@ -284,11 +278,6 @@ if __name__ == '__main__':
+                     sys.stdout.flush()
+ 
+                 if total_step % args.eval_iter == 0:
+-                    # torch.save(gru1.state_dict(), args.models_path + 'gru_smorl{}{}{}_{}iter.pth'.format(
+-                    #     args.smorl_weights[0],
+-                    #     args.smorl_weights[1],
+-                    #     args.smorl_weights[2],
+-                    #     total_step))
+                     print('Evaluating Main Model')
+                     val_acc_main, predictions_main = evaluate(main_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix)
+                     val_acc_main, predictions_main = evaluate(main_QN, args, 'test', state_size, item_num, device,
+diff --git a/src/NextItNet.py b/src/NextItNet.py
+index d1467f8..37c0798 100644
+--- a/src/NextItNet.py
++++ b/src/NextItNet.py
+@@ -1,6 +1,5 @@
+ import time
+ import torch.nn as nn
+-import getpass
+ from utils import *
+ from evaluate_stock import evaluate
+ from NextItNetModules import ResidualBlock
+@@ -64,7 +63,6 @@ class Args:
+     dataset = 'rc15'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+     epochs = 30
+-    resume = 1
+     batch_size = 256
+     hidden_factor = 64
+     r_click = 0.2
+@@ -78,7 +76,6 @@ class Args:
+     models_path = '{}/div4rec/{}_models/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+     results_path = '{}/div4rec/{}_results/nextitnet/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+     results_to_file = True
+-    discount = 0.5
+     num_filters = 16
+     dilations = '[1, 2, 1, 2, 1, 2]'
+ 
+@@ -93,7 +90,6 @@ if __name__ == '__main__':
+     file_name = 'nextitnet.txt'
+     set_stdout(args.results_path, file_name, write_to_file=args.results_to_file)
+ 
+-    nov_rewards_dict = get_novelty_reward_dict(args.data_path)
+     sys.stdout.flush()
+ 
+     state_size, item_num = get_stats(args.data_path)
+@@ -113,23 +109,15 @@ if __name__ == '__main__':
+ 
+     nextItNet.to(device)
+ 
+-    reward_click = args.r_click
+-    reward_buy = args.r_buy
+-
+     # Start training loop
+     epoch_times = []
+     total_step = 0
+-    best_val_acc = 6.1418
+     for epoch in range(0, args.epochs):
+         nextItNet.train()
+         start_time = time.time()
+-        avg_loss = 0.
+-        counter = 0
+         for state, len_state, action, next_state, len_next_state, is_buy, is_done in train_loader:
+-            counter += 1
+ 
+             nextItNet.zero_grad()
+-            # supervised_out = nextItNet(state.to(device).long(), len_state.to(device).long())
+             supervised_out = nextItNet(state.to(device).long(), len_state.long())  # len_state.to(device).long())
+             supervised_loss = criterion(supervised_out, action.to(device).long())
+             optimizer.zero_grad()
+@@ -148,7 +136,6 @@ if __name__ == '__main__':
+                                                                       supervised_loss.item()))
+             if total_step % args.eval_iter == 0:
+                 print('Evaluating Vanilla NextItNet Model')
+-                # val_acc = evaluate(nextItNet, args, 'val', state_size, item_num, device, args.div_emb_matrix)
+                 val_acc, predictions = evaluate(nextItNet, args, 'val', state_size, item_num, device, args.div_emb_matrix)
+                 val_acc, predictions = evaluate(nextItNet, args, 'test', state_size, item_num, device, args.div_emb_matrix)
+                 predictions.to_csv(
+diff --git a/src/NextItNetSMORL.py b/src/NextItNetSMORL.py
+index 0806fa0..aca32c8 100644
+--- a/src/NextItNetSMORL.py
++++ b/src/NextItNetSMORL.py
+@@ -1,5 +1,4 @@
+ import time
+-import getpass
+ from utils import *
+ from NextItNetModules import *
+ from evaluate_smorl import evaluate
+@@ -150,7 +149,6 @@ class Args:
+     dataset = 'rc15'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+     epochs = 50
+-    resume = 1
+     batch_size = 256
+     hidden_factor = 64
+     r_click = 0.2
+@@ -241,15 +239,11 @@ if __name__ == '__main__':
+         # Start training loop
+         epoch_times = []
+         total_step = 0
+-        best_val_acc = 6.1418
+         for epoch in range(0, args.epochs):
+             nextItNet1.train()
+             nextItNet2.train()
+             start_time = time.time()
+-            avg_loss = 0.
+-            counter = 0
+             for state, len_state, action, next_state, len_next_state, is_buy, is_done in train_loader:
+-                counter += 1
+                 pointer = np.random.randint(0, 2)
+                 if pointer == 0:
+                     main_QN = nextItNet1
+diff --git a/src/SASRec.py b/src/SASRec.py
+index bb48346..319c96e 100644
+--- a/src/SASRec.py
++++ b/src/SASRec.py
+@@ -2,7 +2,6 @@ import torch.nn as nn
+ import pickle
+ import time
+ import sys
+-import getpass
+ from utils import *
+ from evaluate_stock import evaluate
+ from SASRecModules import *
+@@ -71,7 +70,6 @@ class Args:
+     dataset = 'rc15'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+     epochs = 30
+-    resume = 1
+     batch_size = 256
+     hidden_factor = 64
+     r_click = 0.2
+@@ -85,7 +83,6 @@ class Args:
+     models_path = '{}/div4rec/{}_models/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+     results_path = '{}/div4rec/{}_results/sasrec/'.format(os.path.abspath(os.getcwd())[:-4], dataset)
+     results_to_file = True
+-    discount = 0.5
+ 
+ 
+ if __name__ == '__main__':
+@@ -98,7 +95,6 @@ if __name__ == '__main__':
+     file_name = 'sasrec.txt'
+     set_stdout(args.results_path, file_name, write_to_file=args.results_to_file)
+ 
+-    nov_rewards_dict = get_novelty_reward_dict(args.data_path)
+     sys.stdout.flush()
+ 
+     state_size, item_num = get_stats(args.data_path)
+@@ -117,22 +113,14 @@ if __name__ == '__main__':
+ 
+     sasRec.to(device)
+ 
+-    reward_click = args.r_click
+-    reward_buy = args.r_buy
+-
+     # Start training loop
+     epoch_times = []
+     total_step = 0
+-    best_val_acc = 6.1418
+     for epoch in range(0, args.epochs):
+         sasRec.train()
+         start_time = time.time()
+-        avg_loss = 0.
+-        counter = 0
+         for state, len_state, action, next_state, len_next_state, is_buy, is_done in train_loader:
+-            counter += 1
+             sasRec.zero_grad()
+-            # supervised_out = sasRec(state.to(device).long(), len_state.to(device).long())
+             supervised_out = sasRec(state.to(device).long(), len_state.long())  # len_state.to(device).long())
+             supervised_loss = criterion(supervised_out, action.to(device).long())
+             optimizer.zero_grad()
+@@ -152,7 +140,6 @@ if __name__ == '__main__':
+ 
+             if total_step % args.eval_iter == 0:
+                 print('Evaluating Vanilla SASREC Model')
+-                # val_acc = evaluate(sasRec, args, 'val', state_size, item_num, device, args.div_emb_matrix)
+                 val_acc, predictions = evaluate(sasRec, args, 'val', state_size, item_num, device, args.div_emb_matrix)
+                 val_acc, predictions = evaluate(sasRec, args, 'test', state_size, item_num, device, args.div_emb_matrix)
+                 predictions.to_csv(
+diff --git a/src/SASRecSMORL.py b/src/SASRecSMORL.py
+index 92446d4..4c3312c 100644
+--- a/src/SASRecSMORL.py
++++ b/src/SASRecSMORL.py
+@@ -1,6 +1,5 @@
+ import time as time
+ import torch.nn.functional as F
+-import getpass
+ from utils import *
+ from evaluate_smorl import evaluate
+ from SASRecModules import *
+@@ -161,7 +160,6 @@ class Args:
+     dataset = 'rc15'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+     epochs = 50
+-    resume = 1
+     batch_size = 256
+     hidden_factor = 64
+     r_click = 0.2
+@@ -249,15 +247,11 @@ if __name__ == '__main__':
+         # Start training loop
+         epoch_times = []
+         total_step = 0
+-        best_val_acc = 6.1418
+         for epoch in range(0, args.epochs):
+             sasrec1.train()
+             sasrec2.train()
+             start_time = time.time()
+-            avg_loss = 0.
+-            counter = 0
+             for state, len_state, action, next_state, len_next_state, is_buy, is_done in train_loader:
+-                counter += 1
+                 pointer = np.random.randint(0, 2)
+                 if pointer == 0:
+                     main_QN = sasrec1
+@@ -309,11 +303,6 @@ if __name__ == '__main__':
+                     sys.stdout.flush()
+ 
+                 if total_step % args.eval_iter == 0:
+-                    # torch.save(sasrec1.state_dict(), args.models_path + 'sasrec_smorl{}{}{}_{}iter.pth'.format(
+-                    #     args.smorl_weights[0],
+-                    #     args.smorl_weights[1],
+-                    #     args.smorl_weights[2],
+-                    #     total_step))
+                     print('Evaluating Main Model')
+                     val_acc_main, predictions_main = evaluate(main_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix)
+                     val_acc_main, predictions_main = evaluate(main_QN, args, 'test', state_size, item_num, device,

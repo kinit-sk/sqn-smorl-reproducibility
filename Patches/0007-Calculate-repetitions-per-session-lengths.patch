@@ -1,0 +1,85 @@
+From 6f30f22a9540dda3151125cfa575d4667aff3eb9 Mon Sep 17 00:00:00 2001
+From: Marek Havrila <ma.havrila@gmail.com>
+Date: Mon, 16 Feb 2026 23:42:20 +0100
+Subject: [PATCH 07/12] Calculate repetitions per session lengths
+
+
+diff --git a/src/evaluate_stock.py b/src/evaluate_stock.py
+index 23916f5..55afd5e 100644
+--- a/src/evaluate_stock.py
++++ b/src/evaluate_stock.py
+@@ -125,9 +125,9 @@ def evaluate(model, args, val_or_test, state_size, item_num, device, div_rl_embe
+         print('coverage on novel items of top 10 predictions: %f' % nov_cov10)
+         print('coverage on novel items of top 20 predictions: %f' % nov_cov20)
+         print('#########################################################################')
+-        print('average number of repetitions in top 5: %f' % sess_avg_num_rpts_5)
+-        print('average number of repetitions in top 10: %f' % sess_avg_num_rpts_10)
+-        print('average number of repetitions in top 20: %f' % sess_avg_num_rpts_20)
++        print(f'average number of repetitions in top 5: {sess_avg_num_rpts_5}')
++        print(f'average number of repetitions in top 10: {sess_avg_num_rpts_10}')
++        print(f'average number of repetitions in top 20: {sess_avg_num_rpts_20}')
+         print('#########################################################################')
+         print('total time needed for the evaluation : ', time.time() - start_time)
+         print('#########################################################################')
+@@ -156,9 +156,9 @@ def evaluate(model, args, val_or_test, state_size, item_num, device, div_rl_embe
+         print('TEST coverage on novel items of top 10 predictions: %f' % nov_cov10)
+         print('TEST coverage on novel items of top 20 predictions: %f' % nov_cov20)
+         print('#########################################################################')
+-        print('TEST average number of repetitions in top 5: %f' % sess_avg_num_rpts_5)
+-        print('TEST average number of repetitions in top 10: %f' % sess_avg_num_rpts_10)
+-        print('TEST average number of repetitions in top 20: %f' % sess_avg_num_rpts_20)
++        print(f'TEST average number of repetitions in top 5: {sess_avg_num_rpts_5}')
++        print(f'TEST average number of repetitions in top 10: {sess_avg_num_rpts_10}')
++        print(f'TEST average number of repetitions in top 20: {sess_avg_num_rpts_20}')
+         print('#########################################################################')
+         print('TEST total time needed for the evaluation : ', time.time() - start_time)
+         print('#########################################################################')
+diff --git a/src/utils.py b/src/utils.py
+index fb59282..2846ff7 100644
+--- a/src/utils.py
++++ b/src/utils.py
+@@ -114,21 +114,34 @@ def calculate_session_repetitions(session_ids, top_20_preds):
+         'top_10_preds': top_10_preds,
+         'top_5_preds': top_5_preds
+     })
+-    num_rpts_20 = 0
+-    num_rpts_10 = 0
+-    num_rpts_5 = 0
++    num_rpts_20 = {}
++    num_rpts_10 = {}
++    num_rpts_5 = {}
++    groups = {}
++    hists_20 = {}
++    hists_10 = {}
++    hists_5 = {}
++
+     rpt_groups = rpt_df.groupby('session_id')
++    group_sizes = rpt_df.groupby('session_id').size()
+     for _, group in rpt_groups:
++        session_length = len(group)
++        groups[session_length] = groups.get(session_length, 0) + 1
+         all_top_20 = np.concatenate(group.top_20_preds.values)
+         all_top_10 = np.concatenate(group.top_10_preds.values)
+         all_top_5 = np.concatenate(group.top_5_preds.values)
+-        num_rpts_20 += len(all_top_20) - len(np.unique(all_top_20))
+-        num_rpts_10 += len(all_top_10) - len(np.unique(all_top_10))
+-        num_rpts_5 += len(all_top_5) - len(np.unique(all_top_5))
+-    num_rpts_20 /= rpt_groups.ngroups
+-    num_rpts_10 /= rpt_groups.ngroups
+-    num_rpts_5 /= rpt_groups.ngroups
+-    return num_rpts_5, num_rpts_10, num_rpts_20
++        num_rpts_20[session_length] = num_rpts_20.get(session_length, 0) + (len(all_top_20) - len(np.unique(all_top_20)))
++        num_rpts_10[session_length] = num_rpts_10.get(session_length, 0) + (len(all_top_10) - len(np.unique(all_top_10)))
++        num_rpts_5[session_length] = num_rpts_5.get(session_length, 0) + (len(all_top_5) - len(np.unique(all_top_5)))
++
++    for session_length, counts in groups.items():
++        hists_20[session_length] = num_rpts_20[session_length] / counts    #rpt_groups.ngroups
++        hists_10[session_length] = num_rpts_10[session_length] / counts    #rpt_groups.ngroups
++        hists_5[session_length] = num_rpts_5[session_length] / counts     #rpt_groups.ngroups
++    sorted_hists_20 = {k: hists_20[k] for k in sorted(hists_20)}
++    sorted_hists_10 = {k: hists_10[k] for k in sorted(hists_10)}
++    sorted_hists_5 = {k: hists_5[k] for k in sorted(hists_5)}
++    return sorted_hists_5, sorted_hists_10, sorted_hists_20
+ 
+ 
+ def eval_cov_nov_cov(all_top_20, item_num, data_path):

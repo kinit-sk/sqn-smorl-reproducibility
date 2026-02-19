@@ -1,0 +1,472 @@
+From 8d87e30933fbd8b3474b899900f37c59e263c38d Mon Sep 17 00:00:00 2001
+From: Marek Havrila <ma.havrila@gmail.com>
+Date: Wed, 18 Feb 2026 22:23:24 +0100
+Subject: [PATCH 11/12] Update preprocessing
+
+
+diff --git a/src/__pycache__/utils.cpython-312.pyc b/src/__pycache__/utils.cpython-312.pyc
+new file mode 100644
+index 0000000000000000000000000000000000000000..e7fcca2fd930ac270fd94e572ec83149f14e470e
+GIT binary patch
+literal 14820
+zcmdUWdu$u$o!|^PB!};ZC{mPdJuKT2EtwMij{H>pmSs7Koj8#nEXAQDN)##2P_m^A
+z8)Dl6GS-EuIDqJFx~6vnMA;Zv^>BCV0A18w1dY2b_BbBZWGCuf?k<Z(?y!I>7u$93
+zfbQ>`;gBPlvD|I{*^%bs_xSz3_xJmLulcFjY{1~LfA405-iTrU8ztmNRg66O1R}E-
+zg;97E>yv)*K9!hO_o>BSVpP+o!BLqisvXt!=|;&uQcSC(`cXrlL5$;3W1mTcH}{#v
+zUrV2bBEE(7St$*KHcAVjozg+*pqv!>ExfOa(nHEg86d2tswpGnxhNB)+>{x@8p;Bp
+zhq6LgOSvc;l&_)ekXlQ*DF>w1QB{zto5Z~}U!o!PdR2n?Y&gcm>BGT9kO?OQ1B&#-
+zgH)LI;(~#Sj|4`82|98$Bu@fDB;i%V`{V%xv)CY(R3&hTiVuqoD`AVd6z+l8M@6W^
+z*u^>wOR8Dbu%-y0_+c?t&El*YVZh{I-&PHXaTy!Ot~U@^LMNjPqyDUTSQUleRee<K
+z$*^%nF(fIqTwhYfs?K0uqL)VCFm5#!8T}G<)vFaWbTBp;7BtLIa4alngJWai7$s;D
+zaXK^vxrtzCM9`1Nn9Jkg@Ko4K2m}RFDCi<FDiR7af|`Z^k1zyO*8tCNcefA4N5k!-
+zK{`Crelik^B-)wFu`SGKoQ`gx!(()u8V^PKBhg4=vYnwr?c<3^l<|#C3YPHI1RV?|
+z0>P^hCg7)?P^Af8CICSSD;P|vLyKlddi!kWOlKxIvyV47E@8N)bs8^_#v6ufhV=Ff
+zp4pZ4-|GB}%ek5suFCs!a`R&~fP7)F-e|qnnhs?yFBls0hE~qdI@iS;e5pePqb1e-
+z1e(A?rA3AWnshX+Pcjh9Vk|zaEQLJud?fu~u;9Be>;lYhQU%Md9!A?|#gjl&BtFAh
+zIadB1)|caQ3^ocZ^AsfIg_f5Tw#Z8aHi>yvy;Eu*HQ?0<nn)r%$_V;IJTMjsjYPwO
+zD$WSRSTHdp5X13E4A#zq)-FIr=x_)Ycv8@gTnW;H02K?40z5TPT1L7GS{2Nt%BTP}
+zKsP`hS`=n41h62^+S#6&o}0aB5xVee<TNqeUmy)POxH~BzB+qu=G^RsnG0Fp{Dyng
+z-*4lq5B!`w_$ye9E}X803PQ>`LdQfra_>N77E>NKdCV+6ask6=EzAmTgkw{So%t#_
+zSO<C|s~W^vyi!e5Kntg!MOZ1U(n_(Vql05Cv@(f(h$CX6j)r4`7IrBd5tvO9&3H7z
+zBm^xK48lB<V?io_as>i{u@$pvM5RLj4^vNjVVsBnFlQl1VT(G$^zLsaGunr`x`Nf6
+zab<KFGG}efk&VTo^u$Bmx`M4{dMfk!`-kSpzdXgQ^K;g%(?o%^-LPJ>W{3rH9pFw|
+zAL}r(PMTxoo<;jloa6T)0&@(Z^i(2fl?a!-+mkS_bZvQNEA3|rXR+^M-&4t}ClR4l
+za8^Kj)xA@i&^Q(B6x5-yaW6q5av%^WOE3YA2u=he(O^I9buAU10D9zA3#teO)QJfo
+zAle7;3>q^~CTU9>;2H=>z_cF<)+2~x5WpH(s%{Kl8_ruca+Zy}r8#x%f9foYcGv9M
+znYCF>wm*9|6Xor#)7r;c%;ZR&`n4K!xKUvy%-c6iYYRqu>eRDa8xaw4+P?+I9tepl
+z<xxxnBFQTr7A|1%&=(gksg4~3LZBLHfo;7yu6hNo7jTIe#MP|8H6}{;7p0Y#@=xII
+z8ZO;V<<6J32f-4Q4sGsAM6Cp+NuZe#pJBAFD;`#J7`vejsRpr->S8AxR;>cwvH}>A
+z3A>y(?2u#SUsjv2$*EyP!&W?Z$(1B_Ms<BJ0c|Hs;~qv-YsFI@4UAd8>X>yeJO<Z_
+zh9Jr6e%~=Xx5ql@v0>F7lYdZ;$v<k3N$9b0)gJ2=J+8E`^#7sul^(`yT6N3@#h9Oe
+zHY)8a!yk2(4A5iqsy#OTK|MD9QG0BJ9$QxJvFQ)$u}RV6nrF}Uv-BrvO01FLSPiRV
+zNmkDqSR-rts7QO0=ES-ZgqgCkIAy(S`v_h0@FXp)<qXg-T%=)F6fv*8cghBwcr-W}
+z=pP>#2-Cnp3hIeqbjrCbI{;az2$&frF;%_14CO)L)Mms}!ll|U6l59_@rM3zLpYKc
+z3eyd}@mRR60qSUo(+vn*lqV8lkU%t4ViLp+J@8EdkTDWS@(3j&@t9zU0e@A@v!dd1
+znh~^culJ8niuXGOwV#FiUdIf<7=Q&Z^am56p#T$^f{H0RJ{E`unS|FWsKzM4NQZ&>
+zDl*3UBUeM=F|j!vaJV4I01F5G91k-hhe4ZR{shAS9Ul$E#z#RkQN_jtO^~L8lL8Tq
+z#|8xw6#}P63q*fB9;ML*PotTK_Vgl`jTmowKdMMqoFT!yYz77UvLxz;pcN;Bq0tQ{
+z7)rCl2s&wc7{RER4;rpTjNXF+#E}aI5T7Ek0BTM!N%5#C>oQg-1{O&9NbHbf3_1a#
+znusI;)2{(=8@$X2Fekv~>ny3a7i(&7TW(phleuk2xaK2#&CzS-g5H)s@=)(ll%3$3
+zPw+L}QrXdm`dUR<H`m<F*POg&{=(wU)g0z6M{?wmLe0i}%@(d^3t!WoBdQDLy37^M
+z+?+T2IJ1v8cchMj#CPNTwez``Uw`B|_rU+&#(eE&u6Fa?t$)4y!`<^;KX~<r=RQ8S
+z(0b(OwMQR%&hh3q^5%=2`66!)q>dKs>$7_}dwbr#le6#S?YmRmz|ZCFjhwyl{q-NT
+z-f5j1{zUbu?nk<X^~ZVpiM+j+v-k4$ms8yZOMRB)EZ)4OgR^w-maVB{z#rx<b)2Q{
+zJ^J=rx89oD^@H_4Z2q`;q5f;U<xt*ooU<I~E#0YO1xHi1hjaMzj@_JNH}B|7om>P)
+zv2~_3_uAJV)dh1ezw+LAzP_ESZ~xD#zahU*-m`zQ{?q0kH7|5@|GfU>!@3~v=+8R_
+zImaOHh@?&yT+O+bmpE5v-qppqx_H;2)agann!IZh=i2l>{lQyz-kLw~v-SV2`6tZ_
+z&9CyVGkMn=oa+tV)t5SrCiE(2ZpoY5IdeO2_KOpmH?QN&>)z|XJ#uSgZqpA`Kh%A!
+zTc|t8o4fMnqn!CDZ$1u_2Q#4OESvKdKWFjtmTjxd02JHnG85UU`Ca!;7V3TT+IzYu
+zYTVI<r@FtWT9+A~-*CS(_vXcgs!OS!g3+BL+)tMpvD!EAr%NWRz8`1MZT)wi13kOR
+zPc;X6_L0lv@sfnt4{WhgLaZdcJi|icWkwbx`4^PGW#*1jA+{LsL>(GL70>fnTnTSL
+zl_;?x!xb*)yK0&B1T|BMiT#RRR$^@{_p1V=+zx0fphu#%LY*WiP!EAZiWpEKB68hA
+zfQTZhi>B<LIZK48KzJe?OEA6=GeIM*h*w3UiJ*6)xPd+hKLRPzR|J992?#XEzX6cM
+z)T6<x0?1qp1H>IN=%c7u6Nx3ZZ57m0kumx(WOz07NtAD1)}UY)YeC2XAohWwc!GWd
+z!00{*7}SnP&m=-tJqU7L5lR%n0|<{ss-tcM{yqdC;yGQjCudG(^|`hKT*Cq0c`$Wq
+zv1Wb2x;Ag!z*#rstu36jg|}{=dxf+5=FRzz<6Ot_d`A!0(ZhH2=3aS~>v%P1IkRZ7
+z-59zy^lOdUqXn|{YZ7Z{%I?cI?dF<x=bH|2O$Y9;%XhuWb-kJI`a0M3b-q4`lqB0Y
+za?P|ZU0d*P&5@o=bG9>AyX7J2Ln^9mpBvZah_#aZsN85MF3OMpYsJP-pj`1`aalH#
+ze_@FWzylcIAcz`9&^L;_K2n^3zEOp^ousiWhbrnS3E_&m<^kFS+eG9<5f6g!Col%T
+zZjoy)AFxWtOU9AwK=P<uKT^je&A{UruBxtzJ%jBiwlD=3aY!8!H>RA&O0w*BR$GP#
+zd07dmQ<f<Dg*NYshc!!wwA2@nNtJb7{|4|~rGBkw2lz3$$CQG=4F7xD`A-CPT@Y1z
+z>fS-AlaCKb$4x^c-5}kB0`d5eptQRJ999@HBZFJL7Qt9NIHER+NW{lR5Hm0y7Ec0j
+z4|Et5eH4lWLQ&8T0(%fo1fu~dU(gRl62$^Tj0z3PKqz}`95lhe;0b22L{3U93LN`T
+zKx`Br76?!!k1&YBDftXp@nQ}IqoMIA@Oq#FOVDEgh8PXz|3i?%zA!u9-Ih+=e2F)&
+zTf&T*gE%O4tLpyja(4S1erH#<<&HPQa#d~9BwXO{GMUbsZ}ax%B}}ge$gYCblWDw`
+z%#w5VJI06B)`ELYrfcTP`;HIR+*vdC#(eO@^Y^;%U;g+Mx8(%i*v+}S(?r3xHuK6&
+zYj)S1|4t`o+j7%dsH)BQXF9X)hgB^F=ekVrW>5AI=WM>&Q*hR0F5f(rJp)|Ft`B$3
+zZ@<_0{oQ=)UT))F&bjy9Q=dB<vi6&&vkd3leDid{*_dtQog3!Vcl-Z(@Wa7*>fS5g
+zAL4xnxRwK)^T2|0!>_7Pzkj7c<9t?OgpRd%;5R`8X`WdX;>2hTI?ODN^qxou%Bs-8
+zk<v6$V||Eu)$|UC(4dRP1bk$<=F5sGBw~rB)n#a;01U&+G(&*+JX_lTC&_}<neIzR
+za@K|%+3-0e-ptx(E@n^UtiBxSlX|OETA|G@_I3kMWYk*_uT@304G1bo??>TCTMG&m
+zJpnpb$f*PacBT>xp)|NuzTaW|aA#5K_XzpuCN&XI62Ys3mxNajuK`{oye3vtNux=X
+zv4H?RAL6+xFAHlvjHU65RPkQ5CT)q5MxV8n`e<kMm5ep4ozlp+Go=-|4Lxf|_i+Nr
+zBH~ktcVKP9CAF3e2Wq!UcfYJmbgWuq1@+i-Yphze#tKS@=ho<CwX4mNVs;(!?3VKs
+zJ*psVvn31}Q?v-c1j3~v&N{36J=(95YkA@JOBga{seN6see(Bc-znGf!tIwZWXw|g
+zq||;Izdi_jpnkZdf++7UnJWes0|=DJMcR|qXyy=8z*bMe6$*-q;yf<PHOiw~mTQu7
+zueX5Fv#iiC$bAEP;tHuEpuo5Yv?l3dT~NCVwRKZ<-2fEDopdSijL*R{F2k!?hG%*X
+zo@p7L2m0V)YgqSyx};!Hl@u)Hn5&exEauhqe)%uI``z!p{C^ODO#^YW=sq3`Z0!hu
+zI1bmenDWahBP!b=6^YQI9arKFtP=aJKMXSeQ5sqCbc1w!e5@Z76-W~zat(qSNWa87
+z7(?+`2=3q*y!2IQS>(UzNfbk5N6?PPB4F#K-C{ywE4;P9V3b&RM#K~Ft4b_-46G^x
+zpq&^W4M3cMu_zM$4$$k!B|8MI*hNMlkugjJEye&&C*|!B45-Q?pi%r4RXbp84hR}C
+zEm-7E70qvkU^E(#CQ>NHp-#P=4^4;S;~>k>3>u!b$TgL^u{;AXEz2NwFtvcToVih^
+zBuQjlnbDE^2RfE;B7zi744r{0qVO{BOWKu<{zp|?vv|5I9ZFO09LrU0P4z%fXlj4t
+z=*R@q{`9NqGw<xoIXY4&Ay_n9Z(O)`q2OvP)NDZi?)AUYYu0F=U>b`qb@Z_btEvW-
+zfx`)by$bXgW-EyDR(tBW6j*GjW1rjIvvo6dSrc#H0uYXxS>KE=yOwwO@{VnsV;k?-
+z0ocyECm5-jKz3bxddH$?ZRWM_)=parjm;m_-l?7Iz1PJz?!Ry68oxHJo&E+#)-6`M
+zXD`iM${xvY*vW0!ncuLF+pv$X-al=4P6-HPy)(Vp9r>p1T+{Y^(;lvA5AWPNtuJiy
+ze-OVDpO4)S@|%wT>`?CIzMr06xD;IIr}F(HT>nTeI>Gl};V)g~daiPtCZ~<*UXE<~
+z_o8iV|KQS{OY^<=yZDVqf7bLM@>Ac!`AZ9dU_LO!1%`4Fnh!Ai`2^RU;5Lp=8`ArE
+za{XgFnxMx{tjYU9+nu(*^etg(%~2fYV%n0?7Mgr>-{6||-*<6M$EL}29Y;1)%v;|!
+zcZplS_ud4z{s@SNmWO2hV;!mp<jRhn^Fw_5fk&=`bB*cCnHF$vXr1{+&UG+#8iK|4
+z9nUS^vTgp@M}bGx`{wX;FyqeJZ`IC>=BoFldLbwnJ(&Y@r*p<VIbzS#rDHhe-1by(
+zbUa<!kGZ?>r-JL?Q=xhvvle#iw@oKrB4$k|_7e}bn7h@)PxR()lK9C+bGMmTX2>tG
+zgZ~OlA+Uqs8gT<8IMIrS*g<fPkbGr|>>z=R@D*T`?4af=VAKkhQJYkkrP+!sW0}>{
+zm1RN&juwWw;$e02r6B*ZIJ(}Fqyn#!w5O5bllm8KOE2Tdzs0r;tF%?JPl7y;lp^Az
+zz^OE@(j~c~Et3MT(zr@8JJ=pxv@NsThWuL`m!)h^K^AIs`;?jB9az$;VB#vM%~-2k
+zU($wj98}3k2FJ>Mdt1SJE5=rVX$A|6O=iK9j&coUW|6gvYhSfWJ$gkwPDMQ>rmI*_
+z^(yrk74^6j^|<757wd7aQjb|tPmQ9UnichUkfwt*u@<(9t!CY<XMilRH|i2Avn<wx
+z`9TMC1#C=jVmSO=|J$qTH?b?YSKIp~FgL%WufU?x6A=8?6-8>ivG^FM0BA`q;Ts!?
+z3M#tas~33_`WOOkLO}`zZ$lsuaqveIv_-=Ws5^pS%K`0Sm}bC-$xnG}=@|qk`r;sC
+zji^YZzlrin*S?>=i7I>tWjbVDz#k~GLKHZZ#3%gak{!!Sb_i7^oQ`sl1|fBn%Yb<+
+zRfx)f0m26a$Fsv0OmZITui%WuC&CijqUaI{xlkW;OHr=qm|VU?s8--Bx}cXU=uko^
+zJ1IkK?RX)!#uf$(8R}A?STp@!VLs8sGM|BL3HpPE&5vxY8GqWI-g>h-XKPKJfS}OW
+z`pDLn=|Z{bZSS~pwl<XCR%qJt$nFFFrZIgeefXW`oZXk|hTsd&n%gzEYO-G5)0QJ#
+zi$=?J`o`q7$(*N^x3=-dE%PL2+?_hS2yk_`>gM#kXX|s}YS-TO-SW-V^0nK+;;?A4
+zzN?zm&*(w%%G-RrseQhMGj*npEWRMzueF%LG9Ag)Zsjan=MVGxmmY&+x9#35i|d+h
+zpTBi}&i>s?IkNUQpwVsnqRN$Xd-<x(sh-6(>u&GAwLiCcZ*Kp~{F+yCM9rerk*jLv
+ztu1qVIqR;}@fQJETX(znR&TC#f9~L`{Ms`)!n0_r$~nEfZS&j(&h}F3#Nz581*0|X
+zOpj;6**E5{-t*i)ku#pk5vQImZNuzsPX!yicHeJmU;yIKe#;;s@Y|+ijlcjL+eCb5
+zI@U^jQs+9>q5iZ(bL=HusB{wm9J*~pb&y5WR#SLVqo7Yp#Ss9ahf-1MyF`idYReR=
+z>;cP`?j4zCf$(`2?qMA$!bDFaPzQ;>lm>~iNI0xym|@F20I5P=xTIWPQV*Kxuk=|`
+z;2A``l5m<dQX0t7f^FU?j{)@nDV$gn(j+G}*Ix%wS_38(t>l4A{~2^|@H_wfU$VdX
+z@%(<UrT|}r3F`0|Q`Gl@xj81-4#k;BEPN(13NCImILnr`z=A3f_nPU`fJVQJa5a+H
+zXrm$%0XiB8kM@TtDiRwM{om*z1fmPY84#dGWz%v=4=7m5IzfafkVt|;6-r_#ii!D_
+z&^S$lA*iS{W{_e^Dg6{3?3`usN9>NMd8R)B;CXnN_aFdTQRRd)VX@^cjhv-1+doGw
+zi1tNM3p{ai4{xqt!nB%ZPy$yYRqmUaskz2m$+^p1eFs<V&sT5fs<+R-&R6f9HvGcl
+zo!iWNc7SM7Rg<yL?4I2-vnMmbS8bXmf8lPPBYC%f+Enn=-a41PG=G6#_chM*H2@}^
+z84E{lx@LN8hL#>%FjEZ>h-Vd?r5*h*&~>HZ5&SJgKRv4ChYehds%%LaCIDf@!<MWo
+zN#I^ra4l#bh)+ce0`_*vP*_PhM5#fUSv+4!<bemZe;dwL(bl5@^=3(xD7RB~U`}dT
+z?HTNu`@Fk&pKE&Q?*bByR!`i%Um_);S4V#jW&Ak`ZlmBR1OgF>`N0Ph9K%JQay2tP
+z>eUHaNidi0XQV@-?;>CaxOB+(p~xD*y=h;W=ND{}y#if5MOy}%tm5{Q<nG$?##;$Y
+z{{sO3ExZikGQkX}H@_$ehik@t%bj)QynA@h-n{29=Q(`;)dvpV(*xH|p=R@6`RDrQ
+zc5pR*<i6l;$-CP)cN_2a<p^iNxF$!e`HitmNkMkN(yp#{^^e*$UAuM5zB)kaVv%zG
+zABZUTSw(3EB&&h)UQ(5*W|>w3jqC*aqyCDr%}_=lHTo2A`btOXO7=T&=Oq9VDBEDE
+zRfLD!sF#_K+rW+mev@TYWF@0{`4j+ERP{<^Pb=*n4JfVRj703-gqe_hezl;o0$mIk
+zij$Bh7^w&o3Jic#Oq>?1H1JPihV(6mNaE-iz^ybA*P_o6BEcvq#$X#QM_K^*A0r&p
+z0BjLg&Fs+3P?pG28J2gofy)K@^x#j=FJUUpYhaxMI~3Tf)__@856P~=hW2^;o!<HL
+zpKSef=Z|(i@IOF)9zO{^XyFf?;dY$mHk_S4o$1P4&K!PdY6LfUz<R7kRRKp~vftQy
+zZEwcP8(VTji$sEo`g-V$;)9gGhs5ezqezzEY6af{w58xdKHHV-8|WmWM=UQ9ASn-p
+zrE*nyNhv}hx<S2^2AOlwr7K^j%5pgm2~RSC0>66XW1#Jws_u`(g7l=wR7xjX^fN$&
+z3_R|&L*TXrPF8yO+$4MzxX<WR{aBa|!8H^d3^&9F8phz3OhhKa4H9x^gS?pzLJjme
+z2*5*3`gnytgi>%<g8U%L8DK6uiL$H;vJwCv2EnGxK<;77Eop9KNdu5@G%;BuN1_uM
+zy$H1-Qp1EHkoM5X%t+Ro^Bn=z&I2lUDX`%BI(X%{H|5<v&h6vf9m`WdH5Lhd&d_@I
+z%zXX*`rO&qxUSbY|Lgpga|?YJbC*W>z8JS9wm`%s;_|HZuykD|pbyC1oZeYxz$m=p
+z_YQFU5n+^9O8!*}(#Yb7V9J+W0<|PQfzm}ciM~kzul=>B#}i}Y38n#D%Nm&AM3_RZ
+zfdi3fxZ$m&fM0=g{0l%8v;%P(9a?ma2x?{$T>O{>6(3K4W1k5wknt$!hs94=^awd1
+zey3u-0_;#26ukkIw|r?t_kO7g`X8avNANP+AxL4r&^Z@LbI#J1w`}7q+va=jzr=0t
+z;Vq{Y$lk?jPo{0o!_{t`Kg3t>zOMd`;d9dT>_J2W6=`%IL|*hD%F~IC7$y2QP~!Jq
+z$Ph{q=-3p~@Vyud_ca_0P4ATStq$@Bj4;Rv(;&JAiaKyf|9=M%fq6U#KXez06Vh%r
+zitdLJBK=RO6hW@|7DbP?FoI#|FQN3mBZvbKz@~LLMRl+zw`CvKxQ}=2N1EidnG2kK
+z^PHa(HOAK3OebgEl)cPZy`We&R;RD#jP*I9UYs$}812QsL=)x32e*mO|2^Qv&wA@=
+zG+aRgg74U*B=sZTD8zGumw_)9qd!JTxb0C=`Z5d+r|e%Tn3zyxY|_Vo*CG>^yp6PD
+z!59@}q^bBEDv&r5#G;7bEQuf6h+lh%zKx<&km!IQn!rVkyeQ0yT&l<`(C9W0kF&Uo
+z#5tmAl!v|n5c!SYl6yztQ?_V$Km8c;5V>a1kpo{I9RCc{e}*|e!%V-#s{aSJ^OsoD
+zXIRx|nBg<byrk9O)+L(?@4}Z1TD)e-p~D?doNFMqm&DgCxy<-M{7D0Ww=Y>X;Cq*P
+j@mjnWU+OdfK&=*E`^2Hay-PL?#2_#~u@QKK*sFg7x?af_
+
+literal 0
+HcmV?d00001
+
+diff --git a/src/merge_and_sort_rc15.py b/src/merge_and_sort_rc15.py
+index f6789db..94214db 100644
+--- a/src/merge_and_sort_rc15.py
++++ b/src/merge_and_sort_rc15.py
+@@ -1,24 +1,16 @@
+ import os
+ import pandas as pd
+ from utils import to_pickled_df
+-import getpass
+ 
+ 
+ if __name__ == '__main__':
+-    data_path = '/home/{}/div4rec/rc15_data/'.format(getpass.getuser())
++    data_path = '{}/../div4rec/rc15_data/'.format(os.getcwd())
+ 
+     sampled_clicks = pd.read_pickle(os.path.join(data_path, 'sampled_clicks.df'))
+-    sampled_buys=pd.read_pickle(os.path.join(data_path, 'sampled_buys.df'))
+-
+     sampled_clicks=sampled_clicks.drop(columns=['category'])
+-    sampled_buys=sampled_buys.drop(columns=['price','quantity'])
+-
+     sampled_clicks['is_buy']=0
+-    sampled_buys['is_buy']=1
+-
+-    merge_session=pd.concat([sampled_clicks, sampled_buys], ignore_index=True)
+-    merge_session=merge_session.sort_values(by=['session_id','timestamp'])
++    sampled_clicks=sampled_clicks.sort_values(by=['session_id','timestamp'])
+ 
+-    merge_session.to_csv('data/sampled_sessions.csv', index = None, header=True)
++    sampled_clicks.to_csv(f'{data_path}sampled_sessions.csv', index = None, header=True)
+ 
+-    to_pickled_df(data_path, sampled_sessions=merge_session)
+\ No newline at end of file
++    to_pickled_df(data_path, sampled_sessions=sampled_clicks)
+diff --git a/src/nov_items_rewards.py b/src/nov_items_rewards.py
+index b74cb83..e0aedd3 100644
+--- a/src/nov_items_rewards.py
++++ b/src/nov_items_rewards.py
+@@ -6,10 +6,11 @@ import pickle
+ 
+ 
+ if __name__ == '__main__':
+-    dataset = 'retail_rocket'  # 'rc15'
+-    data_directory = '{}/div4rec/{}_data'.format(os.path.abspath(os.getcwd())[:-4], dataset)
++    dataset = 'retail_rocket'
++    #dataset = 'rc15'
++    data_directory = f'{os.getcwd()}/../div4rec/{dataset}_data/'
+     replay_buffer_behavior = pd.read_pickle(os.path.join(data_directory, 'sorted_events.df'))  # RETAIL ROCKET
+-    # replay_buffer_behavior = pd.read_pickle(os.path.join(data_directory, 'sampled_sessions.df'))  # RC15
++    #replay_buffer_behavior = pd.read_pickle(os.path.join(data_directory, 'sampled_sessions.df'))  # RC15
+     # Get Novel Items
+     item_freqs = replay_buffer_behavior.item_id.value_counts()
+     threshold = np.quantile(item_freqs, q=0.9)
+@@ -18,7 +19,7 @@ if __name__ == '__main__':
+         if item_freqs.iloc[i] <= threshold:
+             less_popular_items.append(item_freqs.index[i])
+     print('number of less popular items is: ', len(less_popular_items))
+-    with open('{}/div4rec/{}_data/less_popular_items.pkl'.format(os.path.abspath(os.getcwd())[:-4], dataset), 'wb') as f:
++    with open(f'{os.getcwd()}/../div4rec/{dataset}_data/less_popular_items.pkl', 'wb') as f:
+         pickle.dump(less_popular_items, f)
+ 
+     # Binary Novelty Reward System
+@@ -27,4 +28,4 @@ if __name__ == '__main__':
+             item_freqs.iloc[i] = 1
+         else:
+             item_freqs.iloc[i] = 0
+-    item_freqs.to_csv('{}/div4rec/{}_data/binary_nov_reward.csv'.format(os.path.abspath(os.getcwd())[:-4], dataset), header=False)
++    item_freqs.to_csv(f'{os.getcwd()}/../div4rec/{dataset}_data/binary_nov_reward.csv', header=False)
+diff --git a/src/preprocess_retail_rocket.py b/src/preprocess_retail_rocket.py
+index ba5a4e6..4a4d20f 100644
+--- a/src/preprocess_retail_rocket.py
++++ b/src/preprocess_retail_rocket.py
+@@ -7,7 +7,7 @@ from utils import to_pickled_df
+ 
+ 
+ if __name__ == '__main__':
+-    # data_directory = '/div4rec/retail_rocket_data'
++    data_directory = f'{os.getcwd()}/../div4rec/retail_rocket_data'
+     event_df = pd.read_csv(os.path.join('../div4rec/retail_rocket_data/events.csv'), header=0)
+     event_df.columns = ['timestamp','session_id','behavior','item_id','transid']
+     ###remove transid column
+@@ -23,15 +23,16 @@ if __name__ == '__main__':
+     item_encoder = LabelEncoder()
+     session_encoder= LabelEncoder()
+     behavior_encoder=LabelEncoder()
+-    event_df['item_id_enc'] = item_encoder.fit_transform(event_df.item_id)
+-    event_df['session_id_enc'] = session_encoder.fit_transform(event_df.session_id)
+-    event_df['behavior']=behavior_encoder.fit_transform(event_df.behavior)
++    event_df['item_id'] = item_encoder.fit_transform(event_df.item_id)
++    event_df['session_id'] = session_encoder.fit_transform(event_df.session_id)
++    event_df['behavior'] = behavior_encoder.fit_transform(event_df.behavior)
+     ###########sorted by user and timestamp
+     event_df['is_buy']=1-event_df['behavior']
+     event_df = event_df.drop('behavior', axis=1)
+     sorted_events = event_df.sort_values(by=['session_id', 'timestamp'])
+ 
+-    # sorted_events.to_csv('../div4rec/retail_rocket_data/sorted_events_noencoding.csv', index=None, header=True)
++    sorted_events.to_csv('../div4rec/retail_rocket_data/sorted_events.csv', index=None, header=True)
++
++    to_pickled_df(data_directory, sorted_events=sorted_events)
+ 
+-    # to_pickled_df(data_directory, sorted_events=sorted_events)
+ 
+diff --git a/src/replay_buffer_rc15.py b/src/replay_buffer_rc15.py
+index 61c3ece..ba4a2f1 100644
+--- a/src/replay_buffer_rc15.py
++++ b/src/replay_buffer_rc15.py
+@@ -1,12 +1,12 @@
++import os
+ from utils import *
+-import getpass
+ 
+-data_path = '/home/{}/div4rec/rc15_data/'.format(getpass.getuser())
+-for dataset in ['val', 'test']:
++data_path = '{}/../div4rec/rc15_data/'.format(os.getcwd())
++skip_length = 1
++for dataset in ['train']:
+     sorted_events = pd.read_pickle(data_path + 'sampled_{}.df'.format(dataset))
+     state_size, item_num = get_stats(data_path)
+ 
+-    item_ids = sorted_events.item_id.unique()
+     pad_item = item_num
+     groups = sorted_events.groupby('session_id')
+     ids = sorted_events.session_id.unique()
+@@ -16,21 +16,28 @@ for dataset in ['val', 'test']:
+     for id in ids:
+         group = groups.get_group(id)
+         history = []
++        counter=1
+         for index, row in group.iterrows():
+             s = list(history)
+-            len_state.append(state_size if len(s) >= state_size else 1 if len(s) == 0 else len(s))
++            len_s = state_size if len(s) >= state_size else 1 if len(s) == 0 else len(s)
+             s = pad_history(s, state_size, pad_item)
+             a = row['item_id']
+             is_b = row['is_buy']
+-            state.append(s)
+-            action.append(a)
+-            is_buy.append(is_b)
+             history.append(row['item_id'])
+             next_s = list(history)
+-            len_next_state.append(state_size if len(next_s) >= state_size else 1 if len(next_s) == 0 else len(next_s))
++            len_ns = state_size if len(next_s) >= state_size else 1 if len(next_s) == 0 else len(next_s)
+             next_s=pad_history(next_s, state_size, pad_item)
+-            next_state.append(next_s)
+-            is_done.append(False)
++            # sequences of skip_length or shorter are not added to dataset
++            if counter > skip_length:
++                state.append(s)
++                len_state.append(len_s)
++                action.append(a)
++                is_buy.append(is_b)
++                len_next_state.append(len_ns)
++                next_state.append(next_s)
++                is_done.append(False)
++            counter+=1
++        count = counter - 1
+         is_done[-1] = True
+ 
+     replay_buffer_dict = {
+@@ -43,4 +50,4 @@ for dataset in ['val', 'test']:
+         'is_done': is_done
+     }
+     replay_buffer = pd.DataFrame(data=replay_buffer_dict)
+-    replay_buffer.to_pickle(data_path + 'replay_buffer_{}.df'.format(dataset))
++    replay_buffer.to_pickle(data_path + 'replay_buffer.df')
+diff --git a/src/replay_buffer_retail_rocket.py b/src/replay_buffer_retail_rocket.py
+index 7e83698..e73f6fd 100644
+--- a/src/replay_buffer_retail_rocket.py
++++ b/src/replay_buffer_retail_rocket.py
+@@ -1,19 +1,14 @@
+ import os
+ import pandas as pd
+ from utils import to_pickled_df, pad_history, get_stats
+-import getpass
+-
+ 
+ if __name__ == '__main__':
+-    data_path = '/home/{}/div4rec/retail_rocket_data/'.format(getpass.getuser())
++    skip_length = 1
++    data_path = '{}/../div4rec/retail_rocket_data/'.format(os.getcwd())
+ 
+     state_size, item_num = get_stats(data_path)
+-
+-    # reply_buffer = pd.DataFrame(columns=['state','action','reward','next_state','is_done'])
+-    sorted_events=pd.read_pickle(os.path.join(data_path, 'sorted_events.df'))
+-    item_ids=sorted_events.item_id.unique()
+-    pad_item=len(item_ids)
+-
++    pad_item = item_num
++    
+     train_sessions = pd.read_pickle(os.path.join(data_path, 'sampled_train.df'))
+     groups=train_sessions.groupby('session_id')
+     ids=train_sessions.session_id.unique()
+@@ -21,26 +16,33 @@ if __name__ == '__main__':
+     state, len_state, action, is_buy, next_state, len_next_state, is_done = [], [], [], [], [],[],[]
+ 
+     for id in ids:
+-        group=groups.get_group(id)
+-        history=[]
++        group = groups.get_group(id)
++        history = []
++        counter=1
+         for index, row in group.iterrows():
+-            s=list(history)
+-            len_state.append(state_size if len(s) >= state_size else 1 if len(s) == 0 else len(s))
+-            s=pad_history(s, state_size, pad_item)
+-            a=row['item_id']
+-            is_b=row['is_buy']
+-            state.append(s)
+-            action.append(a)
+-            is_buy.append(is_b)
++            s = list(history)
++            len_s = state_size if len(s) >= state_size else 1 if len(s) == 0 else len(s)
++            s = pad_history(s, state_size, pad_item)
++            a = row['item_id']
++            is_b = row['is_buy']
+             history.append(row['item_id'])
+-            next_s=list(history)
+-            len_next_state.append(state_size if len(next_s) >= state_size else 1 if len(next_s) == 0 else len(next_s))
++            next_s = list(history)
++            len_ns = state_size if len(next_s) >= state_size else 1 if len(next_s) == 0 else len(next_s)
+             next_s=pad_history(next_s, state_size, pad_item)
+-            next_state.append(next_s)
+-            is_done.append(False)
+-        is_done[-1]=True
++            # sequences of skip_length or shorter are not added to dataset
++            if counter > skip_length:
++                state.append(s)
++                len_state.append(len_s)
++                action.append(a)
++                is_buy.append(is_b)
++                len_next_state.append(len_ns)
++                next_state.append(next_s)
++                is_done.append(False)
++            counter+=1
++        count = counter - 1
++        is_done[-1] = True
+ 
+     dic={'state':state,'len_state':len_state,'action':action,'is_buy':is_buy,'next_state':next_state,'len_next_states':len_next_state,
+          'is_done':is_done}
+     reply_buffer=pd.DataFrame(data=dic)
+-    to_pickled_df(data_path, replay_buffer=reply_buffer)
+\ No newline at end of file
++    to_pickled_df(data_path, replay_buffer=reply_buffer)
+diff --git a/src/sample_data_rc15.py b/src/sample_data_rc15.py
+index 3597dd6..7919ec9 100644
+--- a/src/sample_data_rc15.py
++++ b/src/sample_data_rc15.py
+@@ -3,7 +3,6 @@ import pandas as pd
+ import numpy as np
+ from sklearn.preprocessing import LabelEncoder
+ from utils import to_pickled_df
+-import getpass
+ 
+ 
+ if __name__ == '__main__':
+@@ -13,18 +12,10 @@ if __name__ == '__main__':
+     click_df['valid_session'] = click_df.session_id.map(click_df.groupby('session_id')['item_id'].size() > 2)
+     click_df = click_df.loc[click_df.valid_session].drop('valid_session', axis=1)
+ 
+-    buy_df = pd.read_csv(os.path.join(data_path, 'yoochoose-buys.dat'), header=None)
+-    buy_df.columns = ['session_id', 'timestamp', 'item_id', 'price', 'quantity']
+-
+     sampled_session_id = np.random.choice(click_df.session_id.unique(), 200000, replace=False)
+     sampled_click_df = click_df.loc[click_df.session_id.isin(sampled_session_id)]
+ 
+     item_encoder = LabelEncoder()
+     sampled_click_df['item_id'] = item_encoder.fit_transform(sampled_click_df.item_id)
+ 
+-    sampled_buy_df = buy_df.loc[buy_df.session_id.isin(sampled_click_df.session_id)]
+-    sampled_buy_df['item_id'] = item_encoder.transform(sampled_buy_df.item_id)
+-
+-    # to_pickled_df(data_path, sampled_clicks=sampled_click_df)
+-    # to_pickled_df(data_path, sampled_buys=sampled_buy_df)
+-
++    to_pickled_df(data_path, sampled_clicks=sampled_click_df)
+diff --git a/src/split_data.py b/src/split_data.py
+index 7136f2d..d6193f0 100644
+--- a/src/split_data.py
++++ b/src/split_data.py
+@@ -2,16 +2,20 @@ import os
+ import numpy as np
+ import pandas as pd
+ from utils import to_pickled_df
+-import getpass
+ 
+ 
+ if __name__ == '__main__':
+-    #data_path = '/home/{}/div4rec/retail_rocket_data/'.format(getpass.getuser())
+-    data_path = '/home/{}/div4rec/rc15_data/'.format(getpass.getuser())
++    
++    data_path = '{}/../div4rec/retail_rocket_data/'.format(os.getcwd())  ## RetailRocket
++    #data_path = '{}/../div4rec/rc15_data/'.format(os.getcwd())  # RC15
++    
+     # sampled_buys=pd.read_pickle(os.path.join(data_directory, 'sampled_buys.df'))
+     #
+     # buy_sessions=sampled_buys.session_id.unique()
+-    sorted_events = pd.read_pickle(os.path.join(data_path, 'sorted_events.df'))
++    
++    sorted_events = pd.read_pickle(os.path.join(data_path, 'sorted_events.df'))  ## RetailRocket
++    #sorted_events = pd.read_pickle(os.path.join(data_path, 'sampled_sessions.df'))  # RC15
++
+ 
+     total_sessions=sorted_events.session_id.unique()
+     np.random.shuffle(total_sessions)
+@@ -27,4 +31,4 @@ if __name__ == '__main__':
+ 
+     to_pickled_df(data_path, sampled_train=train_sessions)
+     to_pickled_df(data_path, sampled_val=val_sessions)
+-    to_pickled_df(data_path,sampled_test=test_sessions)
+\ No newline at end of file
++    to_pickled_df(data_path,sampled_test=test_sessions)

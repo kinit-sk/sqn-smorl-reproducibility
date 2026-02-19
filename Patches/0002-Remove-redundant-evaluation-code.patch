@@ -1,0 +1,370 @@
+From 4fc23b7009855e63564289726ae8380ba4526116 Mon Sep 17 00:00:00 2001
+From: Marek Havrila <ma.havrila@gmail.com>
+Date: Sun, 15 Feb 2026 17:58:51 +0100
+Subject: [PATCH 02/12] Remove redundant evaluation code
+
+evaluation_smorl.py and evaluation_stock.py were
+highly redundant. This commit merges them to a
+single file.
+
+diff --git a/src/CaserSMORL.py b/src/CaserSMORL.py
+index 41173b2..2e33d61 100644
+--- a/src/CaserSMORL.py
++++ b/src/CaserSMORL.py
+@@ -1,7 +1,7 @@
+ import torch.nn as nn
+ import time
+ from utils import *
+-from evaluate_smorl import evaluate
++from evaluate_stock import evaluate
+ import setproctitle
+ setproctitle.setproctitle('CaserSMORL')
+ import os
+@@ -185,6 +185,7 @@ class CaserSMORL(nn.Module):
+ 
+ 
+ class Args:
++    rl = 1
+     random_seed = 42
+     random.seed(random_seed)
+     np.random.seed(random_seed)
+@@ -347,9 +348,9 @@ if __name__ == '__main__':
+                 if total_step % args.eval_iter == 0:
+                     print('Evaluating Main Model')
+                     val_acc_main, predictions_main = evaluate(main_QN, args, 'val', state_size, item_num, device,
+-                                                              args.div_emb_matrix)
++                                                              args.div_emb_matrix, RL=args.rl)
+                     val_acc_main, predictions_main = evaluate(main_QN, args, 'test', state_size, item_num, device,
+-                                                              args.div_emb_matrix)
++                                                              args.div_emb_matrix, RL=args.rl)
+                     predictions_main.to_csv(
+                         '{}pred_main_acc{}_div{}_nov{}_epoch{}_step{}.tsv'.format(args.results_path, smorl_weights[0],
+                                                                                   smorl_weights[1], smorl_weights[2],
+@@ -361,9 +362,9 @@ if __name__ == '__main__':
+                     print('Current accuracy of main model: ', val_acc_main)
+                     print('Evaluating Target Model')
+                     val_acc_target, predictions_target = evaluate(target_QN, args, 'val', state_size, item_num, device,
+-                                                                  args.div_emb_matrix)
++                                                                  args.div_emb_matrix, RL=args.rl)
+                     val_acc_target, predictions_target = evaluate(target_QN, args, 'test', state_size, item_num, device,
+-                                                                  args.div_emb_matrix)
++                                                                  args.div_emb_matrix, RL=args.rl)
+                     predictions_target.to_csv(
+                         '{}pred_target_acc{}_div{}_nov{}_epoch{}_step{}.tsv'.format(args.results_path, smorl_weights[0],
+                                                                                     smorl_weights[1], smorl_weights[2],
+diff --git a/src/GRUSMORL.py b/src/GRUSMORL.py
+index 880a667..7af99b3 100644
+--- a/src/GRUSMORL.py
++++ b/src/GRUSMORL.py
+@@ -2,7 +2,7 @@ import torch
+ import torch.nn as nn
+ import time
+ from utils import *
+-from evaluate_smorl import evaluate
++from evaluate_stock import evaluate
+ import setproctitle
+ setproctitle.setproctitle('GRUSMORL')
+ import os
+@@ -126,6 +126,7 @@ class GRUSMORL(nn.Module):
+ 
+ 
+ class Args:
++    rl = 1
+     random_seed = 42
+     random.seed(random_seed)
+     np.random.seed(random_seed)
+@@ -279,17 +280,17 @@ if __name__ == '__main__':
+ 
+                 if total_step % args.eval_iter == 0:
+                     print('Evaluating Main Model')
+-                    val_acc_main, predictions_main = evaluate(main_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix)
++                    val_acc_main, predictions_main = evaluate(main_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix, RL=args.rl)
+                     val_acc_main, predictions_main = evaluate(main_QN, args, 'test', state_size, item_num, device,
+-                                                              args.div_emb_matrix)
++                                                              args.div_emb_matrix, RL=args.rl)
+                     predictions_main.to_csv('{}pred_main_acc{}_div{}_nov{}_epoch{}_step{}.tsv'.format(args.results_path, smorl_weights[0],smorl_weights[1],smorl_weights[2], epoch, total_step), sep='\t', index=False)
+                     print("I've saved pred main at {}pred_main_acc{}_div{}_nov{}_epoch{}_step{}.tsv".format(args.results_path, smorl_weights[0],smorl_weights[1],smorl_weights[2], epoch, total_step))
+                     main_QN.train()
+                     print('Current accuracy of main model: ', val_acc_main)
+                     print('Evaluating Target Model')
+-                    val_acc_target, predictions_target = evaluate(target_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix)
++                    val_acc_target, predictions_target = evaluate(target_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix, RL=args.rl)
+                     val_acc_target, predictions_target = evaluate(target_QN, args, 'test', state_size, item_num, device,
+-                                                                  args.div_emb_matrix)
++                                                                  args.div_emb_matrix, RL=args.rl)
+                     predictions_target.to_csv('{}pred_target_acc{}_div{}_nov{}_epoch{}_step{}.tsv'.format(args.results_path,smorl_weights[0], smorl_weights[1],smorl_weights[2], epoch, total_step), sep='\t',index=False)
+                     print("I've saved pred target at {}pred_target_acc{}_div{}_nov{}_epoch{}_step{}.tsv".format(args.results_path,
+                         smorl_weights[0], smorl_weights[1], smorl_weights[2], epoch, total_step))
+diff --git a/src/NextItNetSMORL.py b/src/NextItNetSMORL.py
+index aca32c8..5d15ccc 100644
+--- a/src/NextItNetSMORL.py
++++ b/src/NextItNetSMORL.py
+@@ -1,7 +1,7 @@
+ import time
+ from utils import *
+ from NextItNetModules import *
+-from evaluate_smorl import evaluate
++from evaluate_stock import evaluate
+ import setproctitle
+ setproctitle.setproctitle('NextItNetSMORL')
+ import os
+@@ -139,6 +139,7 @@ class NextItNetSMORL(nn.Module):
+ 
+ 
+ class Args:
++    rl = 1
+     random_seed = 42
+     random.seed(random_seed)
+     np.random.seed(random_seed)
+@@ -302,9 +303,9 @@ if __name__ == '__main__':
+                     #    total_step))
+                     print('Evaluating Main Model')
+                     val_acc_main, predictions_main = evaluate(main_QN, args, 'val', state_size, item_num, device,
+-                                                              args.div_emb_matrix)
++                                                              args.div_emb_matrix, RL=args.rl)
+                     val_acc_main, predictions_main = evaluate(main_QN, args, 'test', state_size, item_num, device,
+-                                                              args.div_emb_matrix)
++                                                              args.div_emb_matrix, RL=args.rl)
+                     predictions_main.to_csv(
+                         '{}pred_main_acc{}_div{}_nov{}_epoch{}_step{}.tsv'.format(args.results_path, smorl_weights[0],
+                                                                                   smorl_weights[1], smorl_weights[2],
+@@ -315,9 +316,9 @@ if __name__ == '__main__':
+                     print('Current accuracy of main model: ', val_acc_main)
+                     print('Evaluating Target Model')
+                     val_acc_target, predictions_target = evaluate(target_QN, args, 'val', state_size, item_num, device,
+-                                                                  args.div_emb_matrix)
++                                                                  args.div_emb_matrix, RL=args.rl)
+                     val_acc_target, predictions_target = evaluate(target_QN, args, 'test', state_size, item_num, device,
+-                                                                  args.div_emb_matrix)
++                                                                  args.div_emb_matrix, RL=args.rl)
+                     predictions_target.to_csv(
+                         '{}pred_target_acc{}_div{}_nov{}_epoch{}_step{}.tsv'.format(args.results_path, smorl_weights[0],
+                                                                                     smorl_weights[1], smorl_weights[2],
+diff --git a/src/SASRecSMORL.py b/src/SASRecSMORL.py
+index 4c3312c..49ce4bd 100644
+--- a/src/SASRecSMORL.py
++++ b/src/SASRecSMORL.py
+@@ -1,7 +1,7 @@
+ import time as time
+ import torch.nn.functional as F
+ from utils import *
+-from evaluate_smorl import evaluate
++from evaluate_stock import evaluate
+ from SASRecModules import *
+ import setproctitle
+ setproctitle.setproctitle('SASRecSMORL')
+@@ -150,6 +150,7 @@ class SASRecSMORL(nn.Module):
+ 
+ 
+ class Args:
++    rl = 1
+     random_seed = 42
+     random.seed(random_seed)
+     np.random.seed(random_seed)
+@@ -304,9 +305,9 @@ if __name__ == '__main__':
+ 
+                 if total_step % args.eval_iter == 0:
+                     print('Evaluating Main Model')
+-                    val_acc_main, predictions_main = evaluate(main_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix)
++                    val_acc_main, predictions_main = evaluate(main_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix, RL=args.rl)
+                     val_acc_main, predictions_main = evaluate(main_QN, args, 'test', state_size, item_num, device,
+-                                                              args.div_emb_matrix)
++                                                              args.div_emb_matrix, RL=args.rl)
+                     predictions_main.to_csv(
+                         '{}pred_main_acc{}_div{}_nov{}_epoch{}_step{}.tsv'.format(args.results_path, smorl_weights[0],
+                                                                                   smorl_weights[1], smorl_weights[2],
+@@ -317,9 +318,9 @@ if __name__ == '__main__':
+                     main_QN.train()
+                     print('Current accuracy of main model: ', val_acc_main)
+                     print('Evaluating Target Model')
+-                    val_acc_target, predictions_target = evaluate(target_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix)
++                    val_acc_target, predictions_target = evaluate(target_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix, RL=args.rl)
+                     val_acc_target, predictions_target = evaluate(target_QN, args, 'test', state_size, item_num, device,
+-                                                                  args.div_emb_matrix)
++                                                                  args.div_emb_matrix, RL=args.rl)
+                     predictions_target.to_csv(
+                         '{}pred_target_acc{}_div{}_nov{}_epoch{}_step{}.tsv'.format(args.results_path, smorl_weights[0],
+                                                                                     smorl_weights[1], smorl_weights[2],
+diff --git a/src/evaluate_smorl.py b/src/evaluate_smorl.py
+deleted file mode 100644
+index 1801988..0000000
+--- a/src/evaluate_smorl.py
++++ /dev/null
+@@ -1,152 +0,0 @@
+-import time
+-from utils import *
+-import pandas as pd
+-
+-
+-def evaluate(model, args, val_or_test, state_size, item_num, device, div_rl_embedding):
+-    start_time = time.time()
+-    topk = [5, 10, 20]
+-    reward_click = args.r_click
+-    reward_buy = args.r_buy
+-    if val_or_test == "val":
+-        eval_sessions = pd.read_pickle(args.data_path + 'sampled_val.df')
+-    else:
+-        eval_sessions = pd.read_pickle(args.data_path + 'sampled_test.df')
+-    sess_ids = eval_sessions.session_id
+-    eval_ids = eval_sessions.session_id.unique()
+-    groups = eval_sessions.groupby('session_id')
+-    batch = 100
+-    evaluated = 0
+-    total_clicks = 0.0
+-    total_purchase = 0.0
+-    total_div_reward = 0.0
+-    total_reward = [0, 0, 0]
+-    hit_clicks = [0, 0, 0]
+-    ndcg_clicks = [0, 0, 0]
+-    hit_purchase = [0, 0, 0]
+-    ndcg_purchase = [0, 0, 0]
+-    all_top_20 = []
+-    model.to(device)
+-    model.eval()
+-    while evaluated < len(eval_ids):
+-        states, len_states, actions, rewards = [], [], [], []
+-        for i in range(batch):
+-            if evaluated == len(eval_ids):
+-                break
+-            id = eval_ids[evaluated]
+-            group = groups.get_group(id)
+-            history = []
+-            for index, row in group.iterrows():
+-                state = list(history)
+-                len_states.append(state_size if len(state) >= state_size else 1 if len(state) == 0 else len(state))
+-                state = pad_history(state, state_size, item_num)
+-                states.append(state)
+-                action = row['item_id']
+-                is_buy = row['is_buy']
+-                reward = reward_buy if is_buy == 1 else reward_click
+-                if is_buy == 1:
+-                    total_purchase += 1.0
+-                else:
+-                    total_clicks += 1.0
+-                actions.append(action)
+-                rewards.append(reward)
+-                history.append(row['item_id'])
+-            evaluated += 1
+-        states = torch.stack([torch.from_numpy(np.array(i, dtype=np.long)) for i in states]).long()
+-        len_states = torch.from_numpy(np.fromiter(len_states, dtype=np.long)).long()
+-        preds, _, _, _ = model.forward_eval(states.to(device).long(),
+-                                            len_states.cpu().long())  # len_states.to(device).long())
+-        sorted_list = np.argsort(preds.tolist())
+-        # Evaluate accuracy measurements (NDCGs & HRs)
+-        calculate_hit(sorted_list, topk, actions, rewards, reward_click, total_reward,
+-                      hit_clicks, ndcg_clicks, hit_purchase, ndcg_purchase)
+-        # Calculate diversity reward
+-        top_preds = preds.argmax(dim=-1)
+-        div_reward = calculate_div_reward(states, len_states, top_preds, div_rl_embedding, device)
+-        total_div_reward += div_reward
+-
+-        top_20 = sorted_list[:, -20:].tolist()
+-        all_top_20 += top_20
+-
+-        del states
+-        del len_states
+-        torch.cuda.empty_cache()
+-
+-    val_acc = 0
+-
+-    cov1, cov5, cov10, cov20, nov_cov1, nov_cov5, nov_cov10, nov_cov20 = eval_cov_nov_cov(
+-        all_top_20,
+-        item_num,
+-        args.data_path
+-    )
+-    sess_avg_num_rpts_5, sess_avg_num_rpts_10, sess_avg_num_rpts_20 = calculate_session_repetitions(
+-        sess_ids,
+-        all_top_20
+-    )
+-
+-    all_top_20_numpy = np.concatenate(all_top_20, axis=0)
+-    total_nov_reward = calculate_total_nov_reward(all_top_20_numpy, args.data_path)
+-
+-    if val_or_test == "val":
+-        for i in range(len(topk)):
+-            hr_click = hit_clicks[i] / total_clicks
+-            hr_purchase = hit_purchase[i] / total_purchase
+-            ng_click = ndcg_clicks[i] / total_clicks
+-            ng_purchase = ndcg_purchase[i] / total_purchase
+-            val_acc = val_acc + hr_click + hr_purchase + ng_click + ng_purchase
+-            print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+-            print('cumulative reward @ %d: %f' % (topk[i], total_reward[i]))
+-            print('clicks hr ndcg @ %d : %f, %f' % (topk[i], hr_click, ng_click))
+-            print('purchase hr and ndcg @%d : %f, %f' % (topk[i], hr_purchase, ng_purchase))
+-        print('#########################################################################')
+-        print('total diversity reward: %f' % total_div_reward)
+-        print('total novelty reward: %f' % total_nov_reward)
+-        print('#########################################################################')
+-        print('coverage of top 1 predictions: %f' % cov1)
+-        print('coverage of top 5 predictions: %f' % cov5)
+-        print('coverage of top 10 predictions: %f' % cov10)
+-        print('coverage of top 20 predictions: %f' % cov20)
+-        print('#########################################################################')
+-        print('coverage on novel items of top 1 predictions: %f' % nov_cov1)
+-        print('coverage on novel items of top 5 predictions: %f' % nov_cov5)
+-        print('coverage on novel items of top 10 predictions: %f' % nov_cov10)
+-        print('coverage on novel items of top 20 predictions: %f' % nov_cov20)
+-        print('#########################################################################')
+-        print('average number of repetitions in top 5: %f' % sess_avg_num_rpts_5)
+-        print('average number of repetitions in top 10: %f' % sess_avg_num_rpts_10)
+-        print('average number of repetitions in top 20: %f' % sess_avg_num_rpts_20)
+-        print('#########################################################################')
+-        print('total time needed for the evaluation : ', time.time() - start_time)
+-        print('#########################################################################')
+-    else:
+-        for i in range(len(topk)):
+-            hr_click = hit_clicks[i] / total_clicks
+-            hr_purchase = hit_purchase[i] / total_purchase
+-            ng_click = ndcg_clicks[i] / total_clicks
+-            ng_purchase = ndcg_purchase[i] / total_purchase
+-            val_acc = val_acc + hr_click + hr_purchase + ng_click + ng_purchase
+-            print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+-            print('TEST cumulative reward @ %d: %f' % (topk[i], total_reward[i]))
+-            print('TEST clicks hr ndcg @ %d : %f, %f' % (topk[i], hr_click, ng_click))
+-            print('TEST purchase hr and ndcg @%d : %f, %f' % (topk[i], hr_purchase, ng_purchase))
+-        print('#########################################################################')
+-        print('TEST total diversity reward: %f' % total_div_reward)
+-        print('TEST total novelty reward: %f' % total_nov_reward)
+-        print('#########################################################################')
+-        print('TEST coverage of top 1 predictions: %f' % cov1)
+-        print('TEST coverage of top 5 predictions: %f' % cov5)
+-        print('TEST coverage of top 10 predictions: %f' % cov10)
+-        print('TEST coverage of top 20 predictions: %f' % cov20)
+-        print('#########################################################################')
+-        print('TEST coverage on novel items of top 1 predictions: %f' % nov_cov1)
+-        print('TEST coverage on novel items of top 5 predictions: %f' % nov_cov5)
+-        print('TEST coverage on novel items of top 10 predictions: %f' % nov_cov10)
+-        print('TEST coverage on novel items of top 20 predictions: %f' % nov_cov20)
+-        print('#########################################################################')
+-        print('TEST average number of repetitions in top 5: %f' % sess_avg_num_rpts_5)
+-        print('TEST average number of repetitions in top 10: %f' % sess_avg_num_rpts_10)
+-        print('TEST average number of repetitions in top 20: %f' % sess_avg_num_rpts_20)
+-        print('#########################################################################')
+-        print('TEST total time needed for the evaluation : ', time.time() - start_time)
+-        print('#########################################################################')
+-    return val_acc, pd.DataFrame(all_top_20)
+diff --git a/src/evaluate_stock.py b/src/evaluate_stock.py
+index 6aeaa10..a8f0596 100644
+--- a/src/evaluate_stock.py
++++ b/src/evaluate_stock.py
+@@ -3,7 +3,7 @@ from utils import *
+ import pandas as pd
+ 
+ 
+-def evaluate(model, args, val_or_test, state_size, item_num, device, div_rl_embedding):
++def evaluate(model, args, val_or_test, state_size, item_num, device, div_rl_embedding, RL=0):
+     start_time = time.time()
+     topk = [5, 10, 20]
+     reward_click = args.r_click
+@@ -54,7 +54,10 @@ def evaluate(model, args, val_or_test, state_size, item_num, device, div_rl_embe
+             evaluated += 1
+         states = torch.stack([torch.from_numpy(np.array(i, dtype=np.long)) for i in states]).long()
+         len_states = torch.from_numpy(np.fromiter(len_states, dtype=np.long)).long()
+-        preds = model.forward_eval(states.to(device).long(), len_states.cpu().long())  # len_states.to(device).long())
++        if RL == 0:
++            preds = model.forward_eval(states.to(device).long(), len_states.cpu().long())
++        else:
++            preds, _, _, _ = model.forward_eval(states.to(device).long(), len_states.cpu().long())
+         sorted_list = np.argsort(preds.tolist())
+ 
+         # Evaluate accuracy measurements (NDCGs & HRs)

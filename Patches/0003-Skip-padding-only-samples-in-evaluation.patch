@@ -1,0 +1,333 @@
+From 0fb2e65a08d61f06a49c32b1feb9980797a03a3d Mon Sep 17 00:00:00 2001
+From: Marek Havrila <ma.havrila@gmail.com>
+Date: Sun, 15 Feb 2026 18:46:05 +0100
+Subject: [PATCH 03/12] Skip padding only samples in evaluation
+
+
+diff --git a/src/Caser.py b/src/Caser.py
+index 7ef454c..5a7f6f1 100644
+--- a/src/Caser.py
++++ b/src/Caser.py
+@@ -96,6 +96,7 @@ class Caser(nn.Module):
+ 
+ 
+ class Args:
++    skip = 1
+     dataset = 'rc15'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+     epochs = 30
+@@ -172,8 +173,8 @@ if __name__ == '__main__':
+ 
+             if total_step % args.eval_iter == 0:
+                 print('Evaluating Vanilla Caser Model')
+-                val_acc, predictions = evaluate(caser, args, 'val', state_size, item_num, device, args.div_emb_matrix)
+-                val_acc, predictions = evaluate(caser, args, 'test', state_size, item_num, device, args.div_emb_matrix)
++                val_acc, predictions = evaluate(caser, args, 'val', state_size, item_num, device, args.div_emb_matrix, skip=args.skip)
++                val_acc, predictions = evaluate(caser, args, 'test', state_size, item_num, device, args.div_emb_matrix, skip=args.skip)
+                 predictions.to_csv(
+                     '{}pred_gru_epoch{}_step{}.tsv'.format(args.results_path, epoch, total_step), sep='\t', index=False)
+                 print(
+diff --git a/src/CaserSMORL.py b/src/CaserSMORL.py
+index 2e33d61..293c726 100644
+--- a/src/CaserSMORL.py
++++ b/src/CaserSMORL.py
+@@ -186,6 +186,7 @@ class CaserSMORL(nn.Module):
+ 
+ class Args:
+     rl = 1
++    skip = 1
+     random_seed = 42
+     random.seed(random_seed)
+     np.random.seed(random_seed)
+@@ -348,9 +349,9 @@ if __name__ == '__main__':
+                 if total_step % args.eval_iter == 0:
+                     print('Evaluating Main Model')
+                     val_acc_main, predictions_main = evaluate(main_QN, args, 'val', state_size, item_num, device,
+-                                                              args.div_emb_matrix, RL=args.rl)
++                                                              args.div_emb_matrix, skip=args.skip, RL=args.rl)
+                     val_acc_main, predictions_main = evaluate(main_QN, args, 'test', state_size, item_num, device,
+-                                                              args.div_emb_matrix, RL=args.rl)
++                                                              args.div_emb_matrix, skip=args.skip, RL=args.rl)
+                     predictions_main.to_csv(
+                         '{}pred_main_acc{}_div{}_nov{}_epoch{}_step{}.tsv'.format(args.results_path, smorl_weights[0],
+                                                                                   smorl_weights[1], smorl_weights[2],
+@@ -362,9 +363,9 @@ if __name__ == '__main__':
+                     print('Current accuracy of main model: ', val_acc_main)
+                     print('Evaluating Target Model')
+                     val_acc_target, predictions_target = evaluate(target_QN, args, 'val', state_size, item_num, device,
+-                                                                  args.div_emb_matrix, RL=args.rl)
++                                                                  args.div_emb_matrix, skip=args.skip, RL=args.rl)
+                     val_acc_target, predictions_target = evaluate(target_QN, args, 'test', state_size, item_num, device,
+-                                                                  args.div_emb_matrix, RL=args.rl)
++                                                                  args.div_emb_matrix, skip=args.skip, RL=args.rl)
+                     predictions_target.to_csv(
+                         '{}pred_target_acc{}_div{}_nov{}_epoch{}_step{}.tsv'.format(args.results_path, smorl_weights[0],
+                                                                                     smorl_weights[1], smorl_weights[2],
+diff --git a/src/GRU.py b/src/GRU.py
+index 5661c6d..fe48089 100644
+--- a/src/GRU.py
++++ b/src/GRU.py
+@@ -46,6 +46,7 @@ class GRU(nn.Module):
+ 
+ 
+ class Args:
++    skip = 1
+     dataset = 'rc15'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+     epochs = 30
+@@ -114,8 +115,8 @@ if __name__ == '__main__':
+ 
+             if total_step % args.eval_iter == 0:
+                 print('Evaluating Vanilla GRU Model')
+-                val_acc, predictions = evaluate(gru, args, 'val', state_size, item_num, device, args.div_emb_matrix)
+-                val_acc, predictions = evaluate(gru, args, 'test', state_size, item_num, device, args.div_emb_matrix)
++                val_acc, predictions = evaluate(gru, args, 'val', state_size, item_num, device, args.div_emb_matrix, skip=args.skip)
++                val_acc, predictions = evaluate(gru, args, 'test', state_size, item_num, device, args.div_emb_matrix, skip=args.skip)
+                 predictions.to_csv(
+                     '{}pred_gru_epoch{}_step{}.tsv'.format(args.results_path, epoch, total_step), sep='\t', index=False)
+                 print(
+diff --git a/src/GRUSMORL.py b/src/GRUSMORL.py
+index 7af99b3..f21c98a 100644
+--- a/src/GRUSMORL.py
++++ b/src/GRUSMORL.py
+@@ -127,6 +127,7 @@ class GRUSMORL(nn.Module):
+ 
+ class Args:
+     rl = 1
++    skip = 1
+     random_seed = 42
+     random.seed(random_seed)
+     np.random.seed(random_seed)
+@@ -280,17 +281,17 @@ if __name__ == '__main__':
+ 
+                 if total_step % args.eval_iter == 0:
+                     print('Evaluating Main Model')
+-                    val_acc_main, predictions_main = evaluate(main_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix, RL=args.rl)
++                    val_acc_main, predictions_main = evaluate(main_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix, skip=args.skip, RL=args.rl)
+                     val_acc_main, predictions_main = evaluate(main_QN, args, 'test', state_size, item_num, device,
+-                                                              args.div_emb_matrix, RL=args.rl)
++                                                              args.div_emb_matrix, skip=args.skip, RL=args.rl)
+                     predictions_main.to_csv('{}pred_main_acc{}_div{}_nov{}_epoch{}_step{}.tsv'.format(args.results_path, smorl_weights[0],smorl_weights[1],smorl_weights[2], epoch, total_step), sep='\t', index=False)
+                     print("I've saved pred main at {}pred_main_acc{}_div{}_nov{}_epoch{}_step{}.tsv".format(args.results_path, smorl_weights[0],smorl_weights[1],smorl_weights[2], epoch, total_step))
+                     main_QN.train()
+                     print('Current accuracy of main model: ', val_acc_main)
+                     print('Evaluating Target Model')
+-                    val_acc_target, predictions_target = evaluate(target_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix, RL=args.rl)
++                    val_acc_target, predictions_target = evaluate(target_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix, skip=args.skip, RL=args.rl)
+                     val_acc_target, predictions_target = evaluate(target_QN, args, 'test', state_size, item_num, device,
+-                                                                  args.div_emb_matrix, RL=args.rl)
++                                                                  args.div_emb_matrix, skip=args.skip, RL=args.rl)
+                     predictions_target.to_csv('{}pred_target_acc{}_div{}_nov{}_epoch{}_step{}.tsv'.format(args.results_path,smorl_weights[0], smorl_weights[1],smorl_weights[2], epoch, total_step), sep='\t',index=False)
+                     print("I've saved pred target at {}pred_target_acc{}_div{}_nov{}_epoch{}_step{}.tsv".format(args.results_path,
+                         smorl_weights[0], smorl_weights[1], smorl_weights[2], epoch, total_step))
+diff --git a/src/NextItNet.py b/src/NextItNet.py
+index 37c0798..ada56b5 100644
+--- a/src/NextItNet.py
++++ b/src/NextItNet.py
+@@ -60,6 +60,7 @@ class NextItNet(nn.Module):
+ 
+ 
+ class Args:
++    skip = 1
+     dataset = 'rc15'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+     epochs = 30
+@@ -136,8 +137,8 @@ if __name__ == '__main__':
+                                                                       supervised_loss.item()))
+             if total_step % args.eval_iter == 0:
+                 print('Evaluating Vanilla NextItNet Model')
+-                val_acc, predictions = evaluate(nextItNet, args, 'val', state_size, item_num, device, args.div_emb_matrix)
+-                val_acc, predictions = evaluate(nextItNet, args, 'test', state_size, item_num, device, args.div_emb_matrix)
++                val_acc, predictions = evaluate(nextItNet, args, 'val', state_size, item_num, device, args.div_emb_matrix, skip=args.skip)
++                val_acc, predictions = evaluate(nextItNet, args, 'test', state_size, item_num, device, args.div_emb_matrix, skip=args.skip)
+                 predictions.to_csv(
+                     '{}pred_nextitnet_epoch{}_step{}.tsv'.format(args.results_path, epoch, total_step), sep='\t', index=False)
+                 print(
+diff --git a/src/NextItNetSMORL.py b/src/NextItNetSMORL.py
+index 5d15ccc..71448a3 100644
+--- a/src/NextItNetSMORL.py
++++ b/src/NextItNetSMORL.py
+@@ -140,6 +140,7 @@ class NextItNetSMORL(nn.Module):
+ 
+ class Args:
+     rl = 1
++    skip = 1
+     random_seed = 42
+     random.seed(random_seed)
+     np.random.seed(random_seed)
+@@ -303,9 +304,9 @@ if __name__ == '__main__':
+                     #    total_step))
+                     print('Evaluating Main Model')
+                     val_acc_main, predictions_main = evaluate(main_QN, args, 'val', state_size, item_num, device,
+-                                                              args.div_emb_matrix, RL=args.rl)
++                                                              args.div_emb_matrix, skip=args.skip, RL=args.rl)
+                     val_acc_main, predictions_main = evaluate(main_QN, args, 'test', state_size, item_num, device,
+-                                                              args.div_emb_matrix, RL=args.rl)
++                                                              args.div_emb_matrix, skip=args.skip, RL=args.rl)
+                     predictions_main.to_csv(
+                         '{}pred_main_acc{}_div{}_nov{}_epoch{}_step{}.tsv'.format(args.results_path, smorl_weights[0],
+                                                                                   smorl_weights[1], smorl_weights[2],
+@@ -316,9 +317,9 @@ if __name__ == '__main__':
+                     print('Current accuracy of main model: ', val_acc_main)
+                     print('Evaluating Target Model')
+                     val_acc_target, predictions_target = evaluate(target_QN, args, 'val', state_size, item_num, device,
+-                                                                  args.div_emb_matrix, RL=args.rl)
++                                                                  args.div_emb_matrix, skip=args.skip, RL=args.rl)
+                     val_acc_target, predictions_target = evaluate(target_QN, args, 'test', state_size, item_num, device,
+-                                                                  args.div_emb_matrix, RL=args.rl)
++                                                                  args.div_emb_matrix, skip=args.skip, RL=args.rl)
+                     predictions_target.to_csv(
+                         '{}pred_target_acc{}_div{}_nov{}_epoch{}_step{}.tsv'.format(args.results_path, smorl_weights[0],
+                                                                                     smorl_weights[1], smorl_weights[2],
+diff --git a/src/SASRec.py b/src/SASRec.py
+index 319c96e..bb8eef2 100644
+--- a/src/SASRec.py
++++ b/src/SASRec.py
+@@ -67,6 +67,7 @@ class SASRec(nn.Module):
+ 
+ 
+ class Args:
++    skip = 1
+     dataset = 'rc15'
+     eval_iter = 5000 if dataset == 'rc15' else 10000
+     epochs = 30
+@@ -140,8 +141,8 @@ if __name__ == '__main__':
+ 
+             if total_step % args.eval_iter == 0:
+                 print('Evaluating Vanilla SASREC Model')
+-                val_acc, predictions = evaluate(sasRec, args, 'val', state_size, item_num, device, args.div_emb_matrix)
+-                val_acc, predictions = evaluate(sasRec, args, 'test', state_size, item_num, device, args.div_emb_matrix)
++                val_acc, predictions = evaluate(sasRec, args, 'val', state_size, item_num, device, args.div_emb_matrix, skip=args.skip)
++                val_acc, predictions = evaluate(sasRec, args, 'test', state_size, item_num, device, args.div_emb_matrix, skip=args.skip)
+                 predictions.to_csv(
+                     '{}pred_sasrec_epoch{}_step{}.tsv'.format(args.results_path, epoch, total_step), sep='\t', index=False)
+                 print(
+diff --git a/src/SASRecSMORL.py b/src/SASRecSMORL.py
+index 49ce4bd..149c05a 100644
+--- a/src/SASRecSMORL.py
++++ b/src/SASRecSMORL.py
+@@ -151,6 +151,7 @@ class SASRecSMORL(nn.Module):
+ 
+ class Args:
+     rl = 1
++    skip = 1
+     random_seed = 42
+     random.seed(random_seed)
+     np.random.seed(random_seed)
+@@ -305,9 +306,9 @@ if __name__ == '__main__':
+ 
+                 if total_step % args.eval_iter == 0:
+                     print('Evaluating Main Model')
+-                    val_acc_main, predictions_main = evaluate(main_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix, RL=args.rl)
++                    val_acc_main, predictions_main = evaluate(main_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix, skip=args.skip, RL=args.rl)
+                     val_acc_main, predictions_main = evaluate(main_QN, args, 'test', state_size, item_num, device,
+-                                                              args.div_emb_matrix, RL=args.rl)
++                                                              args.div_emb_matrix, skip=args.skip, RL=args.rl)
+                     predictions_main.to_csv(
+                         '{}pred_main_acc{}_div{}_nov{}_epoch{}_step{}.tsv'.format(args.results_path, smorl_weights[0],
+                                                                                   smorl_weights[1], smorl_weights[2],
+@@ -318,9 +319,9 @@ if __name__ == '__main__':
+                     main_QN.train()
+                     print('Current accuracy of main model: ', val_acc_main)
+                     print('Evaluating Target Model')
+-                    val_acc_target, predictions_target = evaluate(target_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix, RL=args.rl)
++                    val_acc_target, predictions_target = evaluate(target_QN, args, 'val', state_size, item_num, device, args.div_emb_matrix, skip=args.skip, RL=args.rl)
+                     val_acc_target, predictions_target = evaluate(target_QN, args, 'test', state_size, item_num, device,
+-                                                                  args.div_emb_matrix, RL=args.rl)
++                                                                  args.div_emb_matrix, skip=args.skip, RL=args.rl)
+                     predictions_target.to_csv(
+                         '{}pred_target_acc{}_div{}_nov{}_epoch{}_step{}.tsv'.format(args.results_path, smorl_weights[0],
+                                                                                     smorl_weights[1], smorl_weights[2],
+diff --git a/src/evaluate_stock.py b/src/evaluate_stock.py
+index a8f0596..23916f5 100644
+--- a/src/evaluate_stock.py
++++ b/src/evaluate_stock.py
+@@ -3,9 +3,9 @@ from utils import *
+ import pandas as pd
+ 
+ 
+-def evaluate(model, args, val_or_test, state_size, item_num, device, div_rl_embedding, RL=0):
++def evaluate(model, args, val_or_test, state_size, item_num, device, div_rl_embedding, skip=1, RL=0):
+     start_time = time.time()
+-    topk = [5, 10, 20]
++    topk = [1, 5, 10, 20]
+     reward_click = args.r_click
+     reward_buy = args.r_buy
+     if val_or_test == "val":
+@@ -20,37 +20,44 @@ def evaluate(model, args, val_or_test, state_size, item_num, device, div_rl_embe
+     total_clicks = 0.0
+     total_purchase = 0.0
+     total_div_reward = 0.0
+-    total_reward = [0, 0, 0]
+-    hit_clicks = [0, 0, 0]
+-    ndcg_clicks = [0, 0, 0]
+-    hit_purchase = [0, 0, 0]
+-    ndcg_purchase = [0, 0, 0]
++    total_reward = [0, 0, 0, 0]
++    hit_clicks = [0, 0, 0, 0]
++    ndcg_clicks = [0, 0, 0, 0]
++    hit_purchase = [0, 0, 0, 0]
++    ndcg_purchase = [0, 0, 0, 0]
+     all_top_20 = []
++    all_ids = []
+     model.to(device)
+     model.eval()
+     while evaluated < len(eval_ids):
+-        states, len_states, actions, rewards = [], [], [], []
++        ids, states, len_states, actions, rewards = [], [], [], [], []
+         for i in range(batch):
+             if evaluated == len(eval_ids):
+                 break
+             id = eval_ids[evaluated]
+             group = groups.get_group(id)
+             history = []
++            counter=1
+             for index, row in group.iterrows():
+                 state = list(history)
+-                len_states.append(state_size if len(state) >= state_size else 1 if len(state) == 0 else len(state))
++                temp_length = state_size if len(state) >= state_size else 1 if len(state) == 0 else len(state)
+                 state = pad_history(state, state_size, item_num)
+-                states.append(state)
++                s_id = row['session_id']
+                 action = row['item_id']
+                 is_buy = row['is_buy']
+                 reward = reward_buy if is_buy == 1 else reward_click
+-                if is_buy == 1:
+-                    total_purchase += 1.0
+-                else:
+-                    total_clicks += 1.0
+-                actions.append(action)
+-                rewards.append(reward)
++                if counter > skip:
++                    if is_buy == 1:
++                        total_purchase += 1.0
++                    else:
++                        total_clicks += 1.0
++                    ids.append(s_id)
++                    actions.append(action)
++                    rewards.append(reward)
++                    states.append(state)
++                    len_states.append(temp_length)
+                 history.append(row['item_id'])
++                counter+=1
+             evaluated += 1
+         states = torch.stack([torch.from_numpy(np.array(i, dtype=np.long)) for i in states]).long()
+         len_states = torch.from_numpy(np.fromiter(len_states, dtype=np.long)).long()
+@@ -72,6 +79,8 @@ def evaluate(model, args, val_or_test, state_size, item_num, device, div_rl_embe
+         top_20 = sorted_list[:, -20:].tolist()
+         all_top_20 += top_20
+ 
++        all_ids.extend(ids)
++
+         del states
+         del len_states
+         torch.cuda.empty_cache()
+@@ -83,7 +92,7 @@ def evaluate(model, args, val_or_test, state_size, item_num, device, div_rl_embe
+         args.data_path
+     )
+     sess_avg_num_rpts_5, sess_avg_num_rpts_10, sess_avg_num_rpts_20 = calculate_session_repetitions(
+-        sess_ids,
++        all_ids,
+         all_top_20
+     )
+ 
